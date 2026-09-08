@@ -1,0 +1,38 @@
+name: Bug report
+description: Report a bug in the web app
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filling out a bug report. If the bug is in a number or a
+        score, remember: this repo computes nothing. Scores are derived in
+        `plumbline-server`; if a number looks wrong, check the API response
+        first.
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What should happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: What actually happens? Include the page, the route, and any console or network errors.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: The URL, the browser, and the actions that trigger it.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser and version, OS, screen size if layout-related.

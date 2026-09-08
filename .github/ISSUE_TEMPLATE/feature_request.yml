@@ -1,0 +1,30 @@
+name: Feature request
+description: Propose a change to the public directory
+title: "[feat]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This repo reads the server's API and renders it; it computes nothing. If
+        the feature needs a new number, a new endpoint, or a new field, the work
+        starts in `plumbline-server`.
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: What problem does this solve for wallets, users, or the ecosystem?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: What should the page show or do differently?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: What must be true for this to count as done? (Accessibility, empty states, tests, docs.)
