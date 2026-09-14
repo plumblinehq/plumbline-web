@@ -106,6 +106,23 @@ export function formatDuration(ms: number | null | undefined): string {
   return `${(ms / 1000).toFixed(1)} s`;
 }
 
+/**
+ * Elapsed time between the two timestamps the API already returns. This is a
+ * display of that pair, not a new measurement, so it belongs here rather than
+ * warranting a server change.
+ */
+export function formatElapsed(startIso: string, endIso: string | null): string {
+  if (endIso === null) {
+    return EMPTY_VALUE;
+  }
+  const start = new Date(startIso).getTime();
+  const end = new Date(endIso).getTime();
+  if (!Number.isFinite(start) || !Number.isFinite(end)) {
+    return EMPTY_VALUE;
+  }
+  return formatDuration(end - start);
+}
+
 const RELATIVE = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
 
 const RELATIVE_UNITS: ReadonlyArray<readonly [Intl.RelativeTimeFormatUnit, number]> = [

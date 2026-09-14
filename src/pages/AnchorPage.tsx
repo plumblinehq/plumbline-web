@@ -1,15 +1,17 @@
 import { lazy, Suspense } from 'react';
 import { Link, useParams } from 'react-router';
-import { useAnchor, useHistory } from '../api/queries';
+import { useAnchor, useHistory, useRuns } from '../api/queries';
 import { BadgeEmbed } from '../components/BadgeEmbed';
 import { CheckResults } from '../components/CheckResults';
 import { GradeSummary } from '../components/GradeSummary';
 import { NetworkTag } from '../components/NetworkTag';
 import { Panel, PanelHeader } from '../components/Panel';
+import { RunList } from '../components/RunList';
 import { ErrorPanel, LoadingPanel } from '../components/StatePanels';
 import { formatRelativeTime, formatTimestamp } from '../lib/format';
 
 const HISTORY_DAYS = 30;
+const RUN_PAGE_SIZE = 20;
 
 /**
  * The charting library is the heaviest dependency in the app and only this
@@ -26,6 +28,7 @@ export function AnchorPage() {
   const { homeDomain = '' } = useParams<{ homeDomain: string }>();
   const anchor = useAnchor(homeDomain);
   const history = useHistory(homeDomain, HISTORY_DAYS);
+  const runs = useRuns(homeDomain, RUN_PAGE_SIZE);
 
   if (anchor.isPending) {
     return <LoadingPanel label="Loading anchor" />;
@@ -132,6 +135,22 @@ export function AnchorPage() {
           >
             <ScoreHistoryChart points={history.data} />
           </Suspense>
+        )}
+      </Panel>
+
+      <Panel>
+        <PanelHeader
+          title="Recent runs"
+          description={`The last ${RUN_PAGE_SIZE} runs, newest first.`}
+        />
+        {runs.isError ? (
+          <p className="px-4 py-6 text-sm text-slate-500">
+            The run history for this anchor could not be loaded.
+          </p>
+        ) : runs.data === undefined ? (
+          <p className="px-4 py-6 text-sm text-slate-500">Loading runs…</p>
+        ) : (
+          <RunList runs={runs.data} />
         )}
       </Panel>
 

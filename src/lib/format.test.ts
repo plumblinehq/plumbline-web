@@ -5,6 +5,7 @@ import {
   EMPTY_VALUE,
   formatCounts,
   formatDuration,
+  formatElapsed,
   formatRelativeTime,
   formatScore,
   formatTimestamp,
@@ -130,6 +131,16 @@ describe('formatDuration', () => {
 
   it('renders a missing duration as a dash', () => {
     expect(formatDuration(null)).toBe(EMPTY_VALUE);
+  });
+});
+
+describe('formatElapsed', () => {
+  it('measures between the two timestamps the API returned', () => {
+    expect(formatElapsed('2026-09-14T10:39:06.393Z', '2026-09-14T10:39:21.761Z')).toBe('15.4 s');
+  });
+
+  it('renders a dash for a run that has not finished', () => {
+    expect(formatElapsed('2026-09-14T10:39:06.393Z', null)).toBe(EMPTY_VALUE);
   });
 });
 

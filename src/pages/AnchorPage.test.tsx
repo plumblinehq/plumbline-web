@@ -31,10 +31,11 @@ const DETAIL: AnchorDetail = {
   },
 };
 
-function renderPage(detail: AnchorDetail, history: unknown = []) {
+function renderPage(detail: AnchorDetail, history: unknown = [], runs: unknown = []) {
   stubApi({
     '/api/anchors/testanchor.stellar.org': () => jsonResponse(detail),
     '/api/anchors/testanchor.stellar.org/history': () => jsonResponse(history),
+    '/api/anchors/testanchor.stellar.org/runs': () => jsonResponse(runs),
   });
 
   return renderWithProviders(
@@ -122,11 +123,33 @@ describe('AnchorPage', () => {
     expect(await screen.findByText('No runs recorded in this window yet.')).toBeInTheDocument();
   });
 
+  it('lists recent runs with a permalink to each', async () => {
+    renderPage(
+      DETAIL,
+      [],
+      [
+        {
+          id: '75',
+          startedAt: '2026-09-14T10:39:06.393Z',
+          finishedAt: '2026-09-14T10:39:21.761Z',
+          status: 'complete',
+          overallScore: 0.9,
+          checksLibVersion: '0.2.3',
+          counts: { pass: 38, fail: 3, skip: 11, error: 0 },
+        },
+      ],
+    );
+
+    expect(await screen.findByRole('link', { name: '#75' })).toHaveAttribute('href', '/run/75');
+    expect(screen.getByText('38 pass · 3 fail · 11 skip')).toBeInTheDocument();
+  });
+
   it('shows a not-found error for an unknown anchor', async () => {
     stubApi({
       '/api/anchors/testanchor.stellar.org': () =>
         jsonResponse({ error: 'unknown anchor' }, 404, 'Not Found'),
       '/api/anchors/testanchor.stellar.org/history': () => jsonResponse([]),
+      '/api/anchors/testanchor.stellar.org/runs': () => jsonResponse([]),
     });
 
     renderWithProviders(
