@@ -1,24 +1,11 @@
 import { Link } from 'react-router';
 import type { AnchorSummary, Grade } from '../api/types';
 import { formatRelativeTime, formatScore, sepColumns, sepLabel } from '../lib/format';
+import { NetworkTag } from './NetworkTag';
 import { ScoreBadge } from './ScoreBadge';
 
 function gradeFor(anchor: AnchorSummary, sep: number): Grade | undefined {
   return anchor.grades.find((grade) => grade.sep === sep);
-}
-
-function NetworkTag({ network }: { network: string }) {
-  const isTestnet = network === 'testnet';
-  return (
-    <span
-      className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium ${
-        isTestnet ? 'bg-violet-50 text-violet-700' : 'bg-sky-50 text-sky-700'
-      }`}
-      title={isTestnet ? 'A test network anchor: no real funds are involved.' : 'Stellar pubnet.'}
-    >
-      {network}
-    </span>
-  );
 }
 
 export function AnchorTable({

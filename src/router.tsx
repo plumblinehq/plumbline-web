@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import { Layout } from './components/Layout';
 import { RootErrorBoundary } from './components/RootErrorBoundary';
+import { AnchorPage } from './pages/AnchorPage';
 import { DirectoryPage } from './pages/DirectoryPage';
 
 /**
@@ -13,6 +14,9 @@ export const router = createBrowserRouter([
     path: '/',
     element: <Layout />,
     errorElement: <RootErrorBoundary />,
-    children: [{ index: true, element: <DirectoryPage /> }],
+    children: [
+      { index: true, element: <DirectoryPage /> },
+      { path: 'anchor/:homeDomain', element: <AnchorPage /> },
+    ],
   },
 ]);
