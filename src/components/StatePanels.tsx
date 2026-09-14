@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ApiError, apiBase } from '../api/client';
 import { Panel } from './Panel';
 
@@ -53,10 +54,11 @@ export function ErrorPanel({ error, onRetry }: { error: unknown; onRetry?: () =>
   );
 }
 
-export function EmptyPanel({ message }: { message: string }) {
+export function EmptyPanel({ message, children }: { message: string; children?: ReactNode }) {
   return (
     <Panel className="p-8 text-center text-sm text-slate-500">
       <p>{message}</p>
+      {children}
     </Panel>
   );
 }
