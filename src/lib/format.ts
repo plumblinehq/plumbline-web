@@ -1,4 +1,4 @@
-import type { CheckResult, CheckStatus, Grade, Severity } from '../api/types';
+import type { AnchorSummary, CheckResult, CheckStatus, Grade, Severity } from '../api/types';
 
 /**
  * Presentation only. The score itself is computed once, in
@@ -72,6 +72,21 @@ export function groupBySep<T extends { sep: number }>(results: readonly T[]): Ma
 
 export function applicableGrades(grades: readonly Grade[]): Grade[] {
   return grades.filter((grade) => grade.applicable);
+}
+
+/**
+ * The per-SEP columns of the directory come from the data rather than a
+ * hard-coded 1-and-10, so a SEP the server starts grading shows up here with
+ * no web change.
+ */
+export function sepColumns(anchors: readonly AnchorSummary[]): number[] {
+  const seps = new Set<number>();
+  for (const anchor of anchors) {
+    for (const grade of anchor.grades) {
+      seps.add(grade.sep);
+    }
+  }
+  return [...seps].sort((a, b) => a - b);
 }
 
 export function formatDuration(ms: number | null | undefined): string {
