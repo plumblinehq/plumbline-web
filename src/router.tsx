@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import { Layout } from './components/Layout';
 import { RootErrorBoundary } from './components/RootErrorBoundary';
+import { AboutPage } from './pages/AboutPage';
 import { AnchorPage } from './pages/AnchorPage';
 import { ChecksPage } from './pages/ChecksPage';
 import { DirectoryPage } from './pages/DirectoryPage';
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
       { path: 'anchor/:homeDomain', element: <AnchorPage /> },
       { path: 'run/:runId', element: <RunPage /> },
       { path: 'checks', element: <ChecksPage /> },
+      { path: 'about', element: <AboutPage /> },
     ],
   },
 ]);
