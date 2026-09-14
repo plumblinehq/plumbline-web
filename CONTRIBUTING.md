@@ -23,12 +23,30 @@ eventually disagree, and the version users see will be the wrong one.
 
 ## Development
 
-Install, test and build commands are documented here as they land with each
-stage of the build. The lockfile is committed.
+Node 24 or later. The lockfile is committed.
 
-- Build against the real API from the first component, not fixtures.
+```bash
+npm ci                # install
+npm run dev           # Vite dev server
+npm run build         # typecheck, then build to dist/
+npm test              # vitest
+npm run typecheck     # tsc --noEmit
+npm run lint          # eslint
+npm run format        # prettier --write
+```
+
+Tests do not touch the network. They stand in for `fetch` and assert the URL the
+client requested, which is the only way to catch the failure that matters here:
+a filter that looks applied but never reaches the API.
+
+- Build against the real API from the first component, not fixtures. The
+  fixtures in tests are shapes captured from the deployed API, not invented
+  ones.
+- The API base URL is a build-time environment variable (`VITE_API_BASE`). It is
+  read in `src/api/client.ts` and nowhere else.
 - The methodology page (`/about`) is not optional — it is where the project's
-  credibility lives.
+  credibility lives. If you change how a grade is computed or displayed, that
+  page changes in the same pull request, and so does the server.
 
 ## Pull requests
 
