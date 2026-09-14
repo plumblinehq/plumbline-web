@@ -120,7 +120,11 @@ describe('AnchorPage', () => {
     renderPage(DETAIL, []);
 
     expect(await screen.findByRole('heading', { name: 'Score history' })).toBeInTheDocument();
-    expect(await screen.findByText('No runs recorded in this window yet.')).toBeInTheDocument();
+    // The chart is lazy-loaded, so this assertion waits for a second chunk
+    // rather than for a state update.
+    expect(
+      await screen.findByText('No runs recorded in this window yet.', {}, { timeout: 5000 }),
+    ).toBeInTheDocument();
   });
 
   it('lists recent runs with a permalink to each', async () => {

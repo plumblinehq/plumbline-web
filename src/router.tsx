@@ -3,6 +3,7 @@ import { Layout } from './components/Layout';
 import { RootErrorBoundary } from './components/RootErrorBoundary';
 import { AnchorPage } from './pages/AnchorPage';
 import { DirectoryPage } from './pages/DirectoryPage';
+import { RunPage } from './pages/RunPage';
 
 /**
  * The URL is the state. Filters and sorting live in the query string so a
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <DirectoryPage /> },
       { path: 'anchor/:homeDomain', element: <AnchorPage /> },
+      { path: 'run/:runId', element: <RunPage /> },
     ],
   },
 ]);
