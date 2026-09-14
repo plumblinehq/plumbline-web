@@ -1,0 +1,148 @@
+import type { CheckResult, CheckStatus, Grade, Severity } from '../api/types';
+
+/**
+ * Presentation only. The score itself is computed once, in
+ * `plumbline-server`, and every number below is that score rendered for a
+ * human. These buckets decide a colour, never a grade, and the methodology
+ * page says so explicitly so nobody mistakes them for a second scoring rule.
+ */
+export type ScoreTone = 'good' | 'fair' | 'poor' | 'unknown';
+
+/** Shown wherever a score is missing, so an absent value never renders as zero. */
+export const EMPTY_VALUE = '—';
+
+export function formatScore(score: number | null | undefined): string {
+  if (score === null || score === undefined || !Number.isFinite(score)) {
+    return EMPTY_VALUE;
+  }
+  return `${(score * 100).toFixed(1)}%`;
+}
+
+export function scoreTone(score: number | null | undefined): ScoreTone {
+  if (score === null || score === undefined || !Number.isFinite(score)) {
+    return 'unknown';
+  }
+  if (score >= 0.9) {
+    return 'good';
+  }
+  if (score >= 0.7) {
+    return 'fair';
+  }
+  return 'poor';
+}
+
+export function sepLabel(sep: number): string {
+  return `SEP-${sep}`;
+}
+
+const STATUS_RANK: Record<CheckStatus, number> = { error: 0, fail: 1, pass: 2, skip: 3 };
+const SEVERITY_RANK: Record<Severity, number> = { error: 0, warning: 1, info: 2 };
+
+/**
+ * What a reader wants first is what is broken: a check Plumbline could not
+ * complete, then a failure, then passes, then skips. Within a status, the
+ * failures that carry spec weight lead.
+ */
+export function sortResultsForDisplay(results: readonly CheckResult[]): CheckResult[] {
+  return [...results].sort((a, b) => {
+    const byStatus = STATUS_RANK[a.status] - STATUS_RANK[b.status];
+    if (byStatus !== 0) {
+      return byStatus;
+    }
+    const bySeverity = SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity];
+    if (bySeverity !== 0) {
+      return bySeverity;
+    }
+    return a.checkId < b.checkId ? -1 : a.checkId > b.checkId ? 1 : 0;
+  });
+}
+
+export function groupBySep<T extends { sep: number }>(results: readonly T[]): Map<number, T[]> {
+  const grouped = new Map<number, T[]>();
+  for (const result of results) {
+    const bucket = grouped.get(result.sep);
+    if (bucket === undefined) {
+      grouped.set(result.sep, [result]);
+    } else {
+      bucket.push(result);
+    }
+  }
+  return new Map([...grouped.entries()].sort(([a], [b]) => a - b));
+}
+
+export function applicableGrades(grades: readonly Grade[]): Grade[] {
+  return grades.filter((grade) => grade.applicable);
+}
+
+export function formatDuration(ms: number | null | undefined): string {
+  if (ms === null || ms === undefined || !Number.isFinite(ms)) {
+    return EMPTY_VALUE;
+  }
+  if (ms < 1000) {
+    return `${ms} ms`;
+  }
+  return `${(ms / 1000).toFixed(1)} s`;
+}
+
+const RELATIVE = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+
+const RELATIVE_UNITS: ReadonlyArray<readonly [Intl.RelativeTimeFormatUnit, number]> = [
+  ['year', 365 * 24 * 60 * 60 * 1000],
+  ['month', 30 * 24 * 60 * 60 * 1000],
+  ['day', 24 * 60 * 60 * 1000],
+  ['hour', 60 * 60 * 1000],
+  ['minute', 60 * 1000],
+];
+
+/** `now` is injectable so the rendering is deterministic under test. */
+export function formatRelativeTime(iso: string | null | undefined, now: Date = new Date()): string {
+  if (iso === null || iso === undefined) {
+    return EMPTY_VALUE;
+  }
+  const then = new Date(iso).getTime();
+  if (!Number.isFinite(then)) {
+    return EMPTY_VALUE;
+  }
+
+  const difference = then - now.getTime();
+  for (const [unit, milliseconds] of RELATIVE_UNITS) {
+    if (Math.abs(difference) >= milliseconds) {
+      return RELATIVE.format(Math.round(difference / milliseconds), unit);
+    }
+  }
+  return 'just now';
+}
+
+const TIMESTAMP = new Intl.DateTimeFormat('en-GB', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+  timeZone: 'UTC',
+});
+
+export function formatTimestamp(iso: string | null | undefined): string {
+  if (iso === null || iso === undefined) {
+    return EMPTY_VALUE;
+  }
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) {
+    return EMPTY_VALUE;
+  }
+  return `${TIMESTAMP.format(date)} UTC`;
+}
+
+/** `38 pass · 3 fail · 11 skip`, skipping the counts that are zero. */
+export function formatCounts(counts: {
+  pass: number;
+  fail: number;
+  skip: number;
+  error: number;
+}): string {
+  const parts = [
+    `${counts.pass} pass`,
+    `${counts.fail} fail`,
+    `${counts.error} error`,
+    `${counts.skip} skip`,
+  ];
+  const present = parts.filter((part) => !part.startsWith('0 '));
+  return present.length > 0 ? present.join(' · ') : 'no results';
+}
