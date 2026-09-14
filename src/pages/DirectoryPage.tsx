@@ -32,16 +32,10 @@ export function DirectoryPage() {
   } else if (anchors.isError) {
     results = <ErrorPanel error={anchors.error} onRetry={() => void anchors.refetch()} />;
   } else if (anchors.data.length === 0) {
+    // The clear action lives in the filter bar directly above, so the empty
+    // state points at it rather than rendering a second identical button.
     results = filtered ? (
-      <EmptyPanel message="No anchors match these filters.">
-        <button
-          type="button"
-          onClick={reset}
-          className="mt-3 rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700"
-        >
-          Clear filters
-        </button>
-      </EmptyPanel>
+      <EmptyPanel message="No anchors match these filters. Clear them above to see the full list." />
     ) : (
       <EmptyPanel message="No anchors are being monitored yet." />
     );
