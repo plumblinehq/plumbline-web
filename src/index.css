@@ -1,4 +1,11 @@
+@import 'tailwindcss';
+
+/*
+ * The directory is a light-only publication: it is read in the browser next to
+ * an anchor's own docs, and a half-implemented dark mode would be worse than
+ * none. Tailwind v4 is wired through @tailwindcss/vite, so there is no
+ * tailwind.config.js to keep in sync — the theme lives in CSS.
+ */
 :root {
-  color-scheme: light dark;
-  font-family: system-ui, sans-serif;
+  color-scheme: light;
 }
