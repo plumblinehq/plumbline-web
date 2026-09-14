@@ -1,4 +1,11 @@
-import type { AnchorSummary, CheckResult, CheckStatus, Grade, Severity } from '../api/types';
+import type {
+  AnchorSummary,
+  CheckResult,
+  CheckStatus,
+  Grade,
+  RunCounts,
+  Severity,
+} from '../api/types';
 
 /**
  * Presentation only. The score itself is computed once, in
@@ -145,13 +152,21 @@ export function formatTimestamp(iso: string | null | undefined): string {
   return `${TIMESTAMP.format(date)} UTC`;
 }
 
+/**
+ * Counts the rows currently on screen, which is a description of the list and
+ * not a score. The denominator that decides a grade is the API's, and this
+ * function must never be used to re-derive one.
+ */
+export function countByStatus(results: readonly CheckResult[]): RunCounts {
+  const counts: RunCounts = { pass: 0, fail: 0, skip: 0, error: 0 };
+  for (const result of results) {
+    counts[result.status] += 1;
+  }
+  return counts;
+}
+
 /** `38 pass · 3 fail · 11 skip`, skipping the counts that are zero. */
-export function formatCounts(counts: {
-  pass: number;
-  fail: number;
-  skip: number;
-  error: number;
-}): string {
+export function formatCounts(counts: RunCounts): string {
   const parts = [
     `${counts.pass} pass`,
     `${counts.fail} fail`,

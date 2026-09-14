@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router';
 import { useAnchor } from '../api/queries';
 import { BadgeEmbed } from '../components/BadgeEmbed';
+import { CheckResults } from '../components/CheckResults';
 import { GradeSummary } from '../components/GradeSummary';
 import { NetworkTag } from '../components/NetworkTag';
 import { Panel, PanelHeader } from '../components/Panel';
@@ -95,6 +96,21 @@ export function AnchorPage() {
           </p>
         )}
       </Panel>
+
+      {run ? (
+        <Panel>
+          <PanelHeader
+            title="Checks"
+            description="Every check this run performed, grouped by SEP. Open one to see its message, the spec clause it enforces and the HTTP exchange behind it."
+            aside={
+              <span className="text-xs text-slate-500">
+                {run.results.length} check{run.results.length === 1 ? '' : 's'} ran
+              </span>
+            }
+          />
+          <CheckResults results={run.results} />
+        </Panel>
+      ) : null}
 
       <Panel>
         <PanelHeader

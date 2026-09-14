@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   applicableGrades,
+  countByStatus,
   EMPTY_VALUE,
   formatCounts,
   formatDuration,
@@ -160,6 +161,23 @@ describe('formatTimestamp', () => {
   it('renders a missing timestamp as a dash', () => {
     expect(formatTimestamp(null)).toBe(EMPTY_VALUE);
     expect(formatTimestamp('nope')).toBe(EMPTY_VALUE);
+  });
+});
+
+describe('countByStatus', () => {
+  it('counts the rows it was given, per status', () => {
+    expect(
+      countByStatus([
+        result({ checkId: 'a' }),
+        result({ checkId: 'b', status: 'fail' }),
+        result({ checkId: 'c', status: 'fail' }),
+        result({ checkId: 'd', status: 'skip' }),
+      ]),
+    ).toEqual({ pass: 1, fail: 2, skip: 1, error: 0 });
+  });
+
+  it('counts nothing as zero rather than as absent', () => {
+    expect(countByStatus([])).toEqual({ pass: 0, fail: 0, skip: 0, error: 0 });
   });
 });
 
