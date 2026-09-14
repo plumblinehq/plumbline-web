@@ -31,8 +31,11 @@ const DETAIL: AnchorDetail = {
   },
 };
 
-function renderPage(detail: AnchorDetail) {
-  stubApi({ '/api/anchors/testanchor.stellar.org': () => jsonResponse(detail) });
+function renderPage(detail: AnchorDetail, history: unknown = []) {
+  stubApi({
+    '/api/anchors/testanchor.stellar.org': () => jsonResponse(detail),
+    '/api/anchors/testanchor.stellar.org/history': () => jsonResponse(history),
+  });
 
   return renderWithProviders(
     <Routes>
@@ -112,10 +115,18 @@ describe('AnchorPage', () => {
     expect(screen.getByText(/Emailed 2026-09-10/)).toBeInTheDocument();
   });
 
+  it('charts the score history and says when there is none', async () => {
+    renderPage(DETAIL, []);
+
+    expect(await screen.findByRole('heading', { name: 'Score history' })).toBeInTheDocument();
+    expect(await screen.findByText('No runs recorded in this window yet.')).toBeInTheDocument();
+  });
+
   it('shows a not-found error for an unknown anchor', async () => {
     stubApi({
       '/api/anchors/testanchor.stellar.org': () =>
         jsonResponse({ error: 'unknown anchor' }, 404, 'Not Found'),
+      '/api/anchors/testanchor.stellar.org/history': () => jsonResponse([]),
     });
 
     renderWithProviders(

@@ -1,5 +1,6 @@
+import { lazy, Suspense } from 'react';
 import { Link, useParams } from 'react-router';
-import { useAnchor } from '../api/queries';
+import { useAnchor, useHistory } from '../api/queries';
 import { BadgeEmbed } from '../components/BadgeEmbed';
 import { CheckResults } from '../components/CheckResults';
 import { GradeSummary } from '../components/GradeSummary';
@@ -8,9 +9,23 @@ import { Panel, PanelHeader } from '../components/Panel';
 import { ErrorPanel, LoadingPanel } from '../components/StatePanels';
 import { formatRelativeTime, formatTimestamp } from '../lib/format';
 
+const HISTORY_DAYS = 30;
+
+/**
+ * The charting library is the heaviest dependency in the app and only this
+ * page uses it, so it loads as its own chunk rather than on the way to the
+ * directory.
+ */
+const ScoreHistoryChart = lazy(() =>
+  import('../components/ScoreHistoryChart').then((module) => ({
+    default: module.ScoreHistoryChart,
+  })),
+);
+
 export function AnchorPage() {
   const { homeDomain = '' } = useParams<{ homeDomain: string }>();
   const anchor = useAnchor(homeDomain);
+  const history = useHistory(homeDomain, HISTORY_DAYS);
 
   if (anchor.isPending) {
     return <LoadingPanel label="Loading anchor" />;
@@ -94,6 +109,29 @@ export function AnchorPage() {
           <p className="px-4 py-6 text-sm text-slate-500">
             No results yet. The scan runs on a schedule, so check back shortly.
           </p>
+        )}
+      </Panel>
+
+      <Panel>
+        <PanelHeader
+          title="Score history"
+          description={`Every recorded run in the last ${HISTORY_DAYS} days.`}
+          aside={<span className="text-xs text-slate-500">Points are runs, not days.</span>}
+        />
+        {history.isError ? (
+          <p className="px-4 py-6 text-sm text-slate-500">
+            The history for this anchor could not be loaded.
+          </p>
+        ) : history.data === undefined ? (
+          <p className="px-4 py-6 text-sm text-slate-500">Loading history…</p>
+        ) : (
+          <Suspense
+            fallback={
+              <p className="px-4 py-8 text-center text-sm text-slate-500">Loading chart…</p>
+            }
+          >
+            <ScoreHistoryChart points={history.data} />
+          </Suspense>
         )}
       </Panel>
 
