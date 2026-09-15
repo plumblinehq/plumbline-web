@@ -3,7 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- SVG for SVG-aware browsers; the PNG fallback is a fully opaque
+         raster of the same mark for everything older. -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <!-- Matches the app canvas (Tailwind slate-50), so mobile browser
+         chrome blends with the page instead of flashing white. -->
+    <meta name="theme-color" content="#f8fafc" />
     <title>Plumbline — Stellar anchor conformance directory</title>
     <meta
       name="description"
