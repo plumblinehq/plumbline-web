@@ -3,6 +3,7 @@ import type { CheckDefinition } from '../api/types';
 import { useChecks } from '../api/queries';
 import { Panel, PanelHeader } from '../components/Panel';
 import { SeverityTag } from '../components/SeverityTag';
+import { SpecRefLink } from '../components/SpecRefLink';
 import { ErrorPanel, LoadingPanel } from '../components/StatePanels';
 import { groupBySep, sepLabel } from '../lib/format';
 
@@ -91,7 +92,7 @@ export function ChecksPage() {
                         </div>
                         <div className="flex gap-1">
                           <dt className="text-slate-500">spec</dt>
-                          <dd className="text-slate-600">{check.specRef}</dd>
+                          <dd className="text-slate-600"><SpecRefLink specRef={check.specRef} /></dd>
                         </div>
                         {check.requires.length > 0 ? (
                           <div className="flex gap-1">

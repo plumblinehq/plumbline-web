@@ -52,6 +52,53 @@ describe('CheckRow', () => {
     expect(screen.getByText('12 ms')).toBeInTheDocument();
   });
 
+  it('links the spec reference to the clause in the SEP document', async () => {
+    const user = userEvent.setup();
+    render(<CheckRow result={FAILING} />);
+
+    await user.click(screen.getByText('the challenge transaction decodes as XDR'));
+
+    const link = screen.getByRole('link', { name: 'SEP-10 §Response (Success)' });
+    expect(link).toHaveAttribute(
+      'href',
+      'https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0010.md#success',
+    );
+    expect(link).toHaveAttribute('target', '_blank');
+  });
+
+  it('links a clause with no curated section to the document itself rather than a dead anchor', async () => {
+    const user = userEvent.setup();
+    render(<CheckRow result={{ ...FAILING, specRef: 'SEP-99 §Made Up' }} />);
+
+    await user.click(screen.getByText('the challenge transaction decodes as XDR'));
+
+    expect(screen.getByRole('link', { name: 'SEP-99 §Made Up' })).toHaveAttribute(
+      'href',
+      'https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0099.md',
+    );
+  });
+
+  it('shows a reference that does not even parse as plain text rather than inventing a URL', async () => {
+    const user = userEvent.setup();
+    render(<CheckRow result={{ ...FAILING, specRef: 'garbage, no clause shape' }} />);
+
+    await user.click(screen.getByText('the challenge transaction decodes as XDR'));
+
+    expect(screen.getByText('garbage, no clause shape')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'garbage, no clause shape' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows a dash when there is no reference at all', async () => {
+    const user = userEvent.setup();
+    render(<CheckRow result={{ ...FAILING, specRef: null }} />);
+
+    await user.click(screen.getByText('the challenge transaction decodes as XDR'));
+
+    expect(screen.queryByText('Spec reference')?.nextElementSibling).toHaveTextContent('—');
+  });
+
   it('shows the request that was actually made', async () => {
     const user = userEvent.setup();
     render(<CheckRow result={FAILING} />);
