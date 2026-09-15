@@ -1,6 +1,6 @@
 import type { Grade } from '../api/types';
 import { formatErrorCaveat, formatScore, sepLabel } from '../lib/format';
-import { ScoreBar } from './ScoreBadge';
+import { ScoreBar, ScoreHero } from './ScoreBadge';
 
 /**
  * A SEP the anchor does not implement is shown as "not implemented" rather
@@ -20,28 +20,27 @@ export function GradeSummary({
   const caveat = formatErrorCaveat(erroredCount ?? null);
 
   return (
-    <div className="grid gap-5 px-4 py-4 sm:grid-cols-[minmax(0,10rem)_1fr]">
+    <div className="grid gap-6 px-4 py-5 sm:grid-cols-[minmax(0,14rem)_1fr] sm:px-6 sm:py-6">
       <div>
         <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">Overall</p>
-        <p className="mt-1 text-3xl font-semibold tabular-nums text-slate-900">
-          {formatScore(overallScore)}
-          {caveat === null ? null : (
-            <span aria-hidden="true" className="align-top text-lg text-amber-700">
-              *
-            </span>
-          )}
-        </p>
-        <div className="mt-2">
+        <ScoreHero score={overallScore} className="mt-2" />
+        <div className="mt-4">
           <ScoreBar score={overallScore} />
         </div>
         {caveat === null ? (
-          <p className="mt-2 text-xs text-slate-500">
+          <p className="mt-3 text-xs text-slate-500">
             The share of applicable <code className="font-mono">MUST</code> checks that passed.
           </p>
         ) : (
-          <p className="mt-2 text-xs text-amber-700">
-            <span>{caveat}</span> — those results are excluded from this score because Plumbline
-            could not complete them, so the score covers only the checks that ran.
+          /*
+           * The caveat is a warning about the score's coverage, not a footnote:
+           * an unverified clause must be impossible to miss next to a number
+           * that quietly excludes it.
+           */
+          <p className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-2.5 py-2 text-xs leading-relaxed text-amber-900">
+            <span className="font-semibold">{caveat}</span> — those results are excluded from this
+            score because Plumbline could not complete them, so the score covers only the checks
+            that ran.
           </p>
         )}
       </div>
@@ -49,9 +48,9 @@ export function GradeSummary({
       <div>
         <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">By SEP</p>
         {grades.length === 0 ? (
-          <p className="mt-1 text-sm text-slate-500">No SEP grades recorded for this run.</p>
+          <p className="mt-2 text-sm text-slate-500">No SEP grades recorded for this run.</p>
         ) : (
-          <ul className="mt-2 space-y-3">
+          <ul className="mt-3 space-y-4">
             {grades.map((grade) => (
               <li key={grade.sep} className="grid grid-cols-[4rem_1fr] items-center gap-3">
                 <span className="text-sm font-medium text-slate-700">{sepLabel(grade.sep)}</span>

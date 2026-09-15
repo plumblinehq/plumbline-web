@@ -5,6 +5,18 @@ import { SpecRefLink } from './SpecRefLink';
 import { StatusPill } from './StatusPill';
 
 /**
+ * A two-pixel rail on the row's left edge, tinted by status, so the list
+ * reads as a column of verdicts before a single word is parsed. Full class
+ * strings, because Tailwind scans source text.
+ */
+const STATUS_RAIL: Record<CheckResult['status'], string> = {
+  pass: 'border-l-emerald-500',
+  fail: 'border-l-rose-500',
+  skip: 'border-l-slate-300',
+  error: 'border-l-fuchsia-500',
+};
+
+/**
  * Every result can be opened to the evidence it rests on. A directory that
  * says "this anchor fails SEP-10" without showing what was requested and what
  * came back is asking to be trusted rather than checked, which is the
@@ -14,9 +26,11 @@ export function CheckRow({ result }: { result: CheckResult }) {
   const hasDetails = result.message !== null || result.evidence.length > 0;
 
   return (
-    <li className="border-b border-slate-100 last:border-0">
+    <li
+      className={`border-y-0 border-b border-l-2 border-slate-100 ${STATUS_RAIL[result.status]} last:border-b-0`}
+    >
       <details className="group">
-        <summary className="flex cursor-pointer list-none items-start gap-3 px-4 py-3 hover:bg-slate-50">
+        <summary className="flex cursor-pointer list-none items-start gap-3 px-4 py-3 hover:bg-slate-50 sm:px-5">
           <span className="flex shrink-0 items-center gap-1.5 pt-0.5">
             <StatusPill status={result.status} />
             <SeverityTag severity={result.severity} />
@@ -35,7 +49,7 @@ export function CheckRow({ result }: { result: CheckResult }) {
           </span>
         </summary>
 
-        <div className="space-y-3 px-4 pt-1 pb-4">
+        <div className="space-y-3 px-4 pt-1 pb-4 sm:px-5">
           {result.message ? (
             <p className="text-sm text-slate-700">{result.message}</p>
           ) : (
