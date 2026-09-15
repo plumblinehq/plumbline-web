@@ -193,3 +193,21 @@ export function formatCounts(counts: RunCounts): string {
   const present = parts.filter((part) => !part.startsWith('0 '));
   return present.length > 0 ? present.join(' · ') : 'no results';
 }
+
+/**
+ * The caveat for a score whose run had checks Plumbline itself could not
+ * complete. An errored check is excluded from the score like a skip — the
+ * anchor is not penalised for our network failure — but the two are not the
+ * same thing: a skip is a legitimate "not applicable", an error is an
+ * unverified clause. Returning null for zero keeps a fully-verified score
+ * unmarked, and the caller renders the string next to the score verbatim.
+ */
+export function formatErrorCaveat(errorCount: number | null | undefined): string | null {
+  if (errorCount === null || errorCount === undefined || !Number.isInteger(errorCount)) {
+    return null;
+  }
+  if (errorCount <= 0) {
+    return null;
+  }
+  return errorCount === 1 ? '*1 check could not run' : `*${errorCount} checks could not run`;
+}

@@ -107,7 +107,11 @@ export function AnchorPage() {
           }
         />
         {run ? (
-          <GradeSummary overallScore={run.overallScore} grades={run.grades} />
+          <GradeSummary
+            overallScore={run.overallScore}
+            grades={run.grades}
+            erroredCount={run.results.filter((result) => result.status === 'error').length}
+          />
         ) : (
           <p className="px-4 py-6 text-sm text-slate-500">
             No results yet. The scan runs on a schedule, so check back shortly.

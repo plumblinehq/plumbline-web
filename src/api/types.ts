@@ -77,6 +77,13 @@ export interface AnchorSummary {
   lastRunId: string | null;
   lastRunAt: string | null;
   lastRunStatus: string | null;
+  /**
+   * Checks in the latest run that returned `error` — Plumbline's own
+   * failure, not the anchor's. Errored checks are excluded from the score
+   * rather than failed, so this is what lets a reader tell a fully-verified
+   * 100% from a 100% that never ran everything. Null when there is no run.
+   */
+  lastRunErrorCount: number | null;
   overallScore: number | null;
   grades: Grade[];
 }

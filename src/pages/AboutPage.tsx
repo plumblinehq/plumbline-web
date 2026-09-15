@@ -52,6 +52,13 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
             with two SEPs at 100% and 50% scores 75%, regardless of how many checks each SEP
             contains.
           </p>
+          <p>
+            Because an <strong>error</strong> leaves the score untouched, a score is only a claim
+            about the checks that actually ran. Wherever the latest run contained checks Plumbline
+            could not complete, the score is marked with an asterisk and a note saying how many —
+            <em>3 checks could not run</em> — so a 100% that was never fully verified cannot present
+            itself as one that was.
+          </p>
         </div>
       </Panel>
 

@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import type { AnchorSummary, Grade } from '../api/types';
-import { formatRelativeTime, formatScore, sepColumns, sepLabel } from '../lib/format';
+import { formatErrorCaveat, formatRelativeTime, formatScore, sepColumns, sepLabel } from '../lib/format';
 import { NetworkTag } from './NetworkTag';
 import { ScoreBadge } from './ScoreBadge';
 
@@ -85,6 +85,17 @@ export function AnchorTable({
               })}
               <td className="px-4 py-3 text-right">
                 <ScoreBadge score={anchor.overallScore} />
+                {(() => {
+                  const caveat = formatErrorCaveat(anchor.lastRunErrorCount);
+                  return caveat === null ? null : (
+                    <span
+                      className="ml-1 text-xs text-amber-700"
+                      title={`${caveat.slice(1)} — Plumbline could not complete them, so the score covers only the checks that ran.`}
+                    >
+                      {caveat}
+                    </span>
+                  );
+                })()}
               </td>
               <td className="px-4 py-3 text-xs text-slate-500">
                 {anchor.lastRunAt === null ? (

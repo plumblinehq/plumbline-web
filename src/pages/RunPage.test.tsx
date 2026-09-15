@@ -89,6 +89,37 @@ describe('RunPage', () => {
     expect(await screen.findByText('aborted')).toBeInTheDocument();
   });
 
+  it('marks the grade when the run had checks Plumbline itself could not complete', async () => {
+    // Errored checks are excluded from the score like skips, so without the
+    // marker a run where Plumbline never reached the anchor would display a
+    // clean 100% as if every clause had been verified.
+    const ERROR_RESULT = {
+      ...RUN.results[0]!,
+      checkId: 'sep10.challenge-returns-200',
+      sep: 10,
+      status: 'error' as const,
+      severity: 'error' as const,
+      message: 'Plumbline failed to run this check: fetch failed',
+      title: 'the challenge endpoint returns 200',
+    };
+    renderPage({
+      ...RUN,
+      overallScore: 1,
+      grades: [{ sep: 1, score: 1, applicable: true }],
+      results: [RUN.results[0]!, ERROR_RESULT],
+    });
+
+    await screen.findByText('100.0%', { selector: 'p' });
+    expect(screen.getByText('*1 check could not run')).toBeInTheDocument();
+  });
+
+  it('does not mark a grade whose run completed every check', async () => {
+    renderPage(RUN);
+
+    await screen.findByText('90.0%', { selector: 'p' });
+    expect(screen.queryByText(/could not run/)).not.toBeInTheDocument();
+  });
+
   it('shows a not-found error for an unknown run', async () => {
     stubApi({ '/api/runs/75': () => jsonResponse({ error: 'unknown run' }, 404, 'Not Found') });
 

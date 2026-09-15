@@ -15,6 +15,7 @@ function anchor(overrides: Partial<AnchorSummary> = {}): AnchorSummary {
     lastRunId: '10',
     lastRunAt: '2026-09-14T09:00:00.000Z',
     lastRunStatus: 'complete',
+    lastRunErrorCount: 0,
     overallScore: 0.9,
     grades: [
       { sep: 1, score: 1, applicable: true },
@@ -103,6 +104,34 @@ describe('AnchorTable', () => {
     renderTable([anchor({ lastRunStatus: 'aborted' })]);
 
     expect(screen.getByText('(aborted)')).toBeInTheDocument();
+  });
+
+  it('marks a score whose run had checks Plumbline could not complete', () => {
+    // A 100% whose checks all errored is not a verified 100%: errored checks
+    // are excluded from the score like skips, so without this marker the two
+    // situations are indistinguishable in the directory.
+    renderTable([anchor({ overallScore: 1, lastRunErrorCount: 3 })]);
+
+    const row = screen.getByRole('row', { name: /Example Anchor/ });
+    expect(within(row).getByText('*3 checks could not run')).toBeInTheDocument();
+  });
+
+  it('singles out one errored check with singular wording', () => {
+    renderTable([anchor({ overallScore: 1, lastRunErrorCount: 1 })]);
+
+    expect(screen.getByText('*1 check could not run')).toBeInTheDocument();
+  });
+
+  it('leaves a fully-verified score unmarked', () => {
+    renderTable([anchor({ overallScore: 1, lastRunErrorCount: 0 })]);
+
+    expect(screen.queryByText(/could not run/)).not.toBeInTheDocument();
+  });
+
+  it('does not mark an anchor that has no run at all', () => {
+    renderTable([anchor({ lastRunAt: null, overallScore: null, lastRunErrorCount: null })]);
+
+    expect(screen.queryByText(/could not run/)).not.toBeInTheDocument();
   });
 
   it('renders relative times against the injected clock', () => {

@@ -5,7 +5,7 @@ import { GradeSummary } from '../components/GradeSummary';
 import { NetworkTag } from '../components/NetworkTag';
 import { Panel, PanelHeader } from '../components/Panel';
 import { ErrorPanel, LoadingPanel } from '../components/StatePanels';
-import { formatElapsed, formatTimestamp } from '../lib/format';
+import { countByStatus, formatElapsed, formatTimestamp } from '../lib/format';
 
 export function RunPage() {
   const { runId = '' } = useParams<{ runId: string }>();
@@ -66,7 +66,11 @@ export function RunPage() {
           title="Grade"
           description="As computed by the API for this run. This site derives no scores of its own."
         />
-        <GradeSummary overallScore={detail.overallScore} grades={detail.grades} />
+        <GradeSummary
+          overallScore={detail.overallScore}
+          grades={detail.grades}
+          erroredCount={countByStatus(detail.results).error}
+        />
       </Panel>
 
       <Panel>
