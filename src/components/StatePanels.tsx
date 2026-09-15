@@ -26,15 +26,35 @@ const COLD_START_HINT =
 
 export function ErrorPanel({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
   const isApiError = error instanceof ApiError;
-  const heading = isApiError && error.status === 404 ? 'Not found' : 'Could not load this data';
+  /**
+   * A non-HTTP failure means the request never got an answer — the free
+   * tier spinning up, or the browser blocking the request. Showing the raw
+   * TypeError there names our plumbing, not the reader's problem; the honest
+   * message is what happened and that retrying works.
+   */
+  const isNetworkError = !isApiError && error instanceof Error;
+  const heading = isApiError
+    ? error.status === 404
+      ? 'Not found'
+      : 'Could not load this data'
+    : isNetworkError
+      ? 'Could not reach the API'
+      : 'Could not load this data';
 
   return (
     <Panel className="p-6">
       <div role="alert">
         <h2 className="text-sm font-semibold text-rose-700">{heading}</h2>
-        <p className="mt-1 text-sm text-slate-600">
-          {error instanceof Error ? error.message : 'An unexpected error occurred.'}
-        </p>
+        {isApiError ? (
+          <p className="mt-1 text-sm text-slate-600">{error.message}</p>
+        ) : isNetworkError ? (
+          <p className="mt-1 text-sm text-slate-600">
+            The request failed before the API answered. This is what its free tier waking up looks
+            like from the outside.
+          </p>
+        ) : (
+          <p className="mt-1 text-sm text-slate-600">An unexpected error occurred.</p>
+        )}
         <p className="mt-2 text-xs text-slate-500">{COLD_START_HINT}</p>
         <p className="mt-2 text-xs text-slate-400">
           API base: <code className="font-mono">{apiBase}</code>

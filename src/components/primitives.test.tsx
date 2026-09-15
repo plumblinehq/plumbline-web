@@ -94,7 +94,7 @@ describe('StatePanels', () => {
 
   it('explains the free-tier cold start rather than blaming the reader', () => {
     render(<ErrorPanel error={new Error('Failed to fetch')} />);
-    expect(screen.getByRole('alert')).toHaveTextContent('Could not load this data');
+    expect(screen.getByRole('alert')).toHaveTextContent('Could not reach the API');
     expect(screen.getByText(/sleeps when idle/i)).toBeInTheDocument();
   });
 
