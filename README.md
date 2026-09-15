@@ -103,6 +103,7 @@ fallback API.
 | `/run/{run_id}`         | One run, permalinked.                                                                                                                                         |
 | `/checks`               | The full check catalogue, read from the API, with each check's spec clause and severity.                                                                      |
 | `/about`                | Methodology: how a grade is computed, what is deliberately not tested, the opt-out process, and the comparison with SDF's tool.                               |
+| `/docs`                 | Documentation: running the checks yourself (CLI + library), the public API's routes and field-level response reference, and the contributor guide.             |
 
 ## Deployment
 

@@ -1,5 +1,6 @@
 import { createBrowserRouter, type RouteObject } from 'react-router';
 import { AboutPage } from './pages/AboutPage';
+import { DocsPage } from './pages/DocsPage';
 import { AnchorPage } from './pages/AnchorPage';
 import { ChecksPage } from './pages/ChecksPage';
 import { DirectoryPage } from './pages/DirectoryPage';
@@ -27,6 +28,7 @@ export const appRoutes: RouteObject[] = [
       { path: 'run/:runId', element: <RunPage /> },
       { path: 'checks', element: <ChecksPage /> },
       { path: 'about', element: <AboutPage /> },
+      { path: 'docs', element: <DocsPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

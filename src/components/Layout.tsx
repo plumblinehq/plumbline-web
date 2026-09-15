@@ -5,6 +5,7 @@ const NAV_ITEMS = [
   { to: '/', label: 'Directory', end: true },
   { to: '/checks', label: 'Checks', end: false },
   { to: '/about', label: 'Methodology', end: false },
+  { to: '/docs', label: 'Docs', end: false },
 ];
 
 function navLinkClass({ isActive }: { isActive: boolean }): string {
