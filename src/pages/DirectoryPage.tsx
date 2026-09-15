@@ -46,10 +46,10 @@ export function DirectoryPage() {
   return (
     <div className="space-y-4">
       <header>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
           Stellar anchor conformance directory
         </h1>
-        <p className="mt-1 max-w-3xl text-sm text-slate-600">
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
           Whether public Stellar anchors conform to the Stellar Ecosystem Proposals they claim to
           implement. Checks run read-only against the unauthenticated surface on a{' '}
           <strong className="font-medium">15-minute schedule</strong>, not continuously. A grade

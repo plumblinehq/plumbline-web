@@ -50,14 +50,14 @@ export function AnchorPage() {
     <div className="space-y-4">
       <Breadcrumb />
 
-      <header className="space-y-2">
+      <header className="space-y-1">
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-xl font-semibold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
             {detail.displayName ?? detail.homeDomain}
           </h1>
           <NetworkTag network={detail.network} />
         </div>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-1 text-sm text-slate-500">
           <a
             className="font-mono underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
             href={`https://${detail.homeDomain}`}

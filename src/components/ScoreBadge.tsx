@@ -18,6 +18,26 @@ const TONE_BAR: Record<ScoreTone, string> = {
   unknown: 'bg-slate-300',
 };
 
+/** Readable-on-white partners for the pill fills, for large type and glyphs. */
+const TONE_TEXT: Record<ScoreTone, string> = {
+  good: 'text-grade-good',
+  fair: 'text-grade-fair',
+  poor: 'text-grade-poor',
+  unknown: 'text-grade-unknown',
+};
+
+/**
+ * The one glyph a visitor scans for. Written as full class strings for the
+ * same reason the tone maps are — and as text with an aria-hidden mark, so
+ * screen readers keep reading the score itself.
+ */
+const TONE_GLYPH: Record<ScoreTone, string> = {
+  good: '✓',
+  fair: '≈',
+  poor: '✕',
+  unknown: '–',
+};
+
 export function ScoreBadge({
   score,
   className = '',
@@ -31,6 +51,25 @@ export function ScoreBadge({
     >
       {formatScore(score)}
     </span>
+  );
+}
+
+/**
+ * The overall grade, sized to be found first. The glyph carries the tone a
+ * second time in shape, not just colour, so the colour-blind read works too.
+ */
+export function ScoreHero({ score, className = '' }: { score: number | null; className?: string }) {
+  const tone = scoreTone(score);
+
+  return (
+    <p
+      className={`inline-flex items-baseline gap-2 text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl ${TONE_TEXT[tone]} ${className}`}
+    >
+      <span aria-hidden="true" className="text-2xl font-medium sm:text-3xl">
+        {TONE_GLYPH[tone]}
+      </span>
+      {formatScore(score)}
+    </p>
   );
 }
 

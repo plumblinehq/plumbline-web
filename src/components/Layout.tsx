@@ -13,12 +13,41 @@ function navLinkClass({ isActive }: { isActive: boolean }): string {
   return isActive ? `${base} bg-slate-900 text-white` : `${base} text-slate-600 hover:bg-slate-100`;
 }
 
+/**
+ * The plumb line: a weighted line that shows whether something is true and
+ * vertical. The same mark as the favicon, drawn inline so the header never
+ * depends on an asset request.
+ */
+function Mark() {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 0 32 32"
+      className="h-6 w-6"
+      fill="none"
+    >
+      <line
+        x1="16"
+        y1="2"
+        x2="16"
+        y2="20"
+        stroke="#0f172a"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+      <path d="M16 18 L22 27 A7 7 0 0 1 10 27 Z" fill="#0f172a" />
+    </svg>
+  );
+}
+
 export function Layout() {
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <Link to="/" className="flex items-baseline gap-2">
+          <Link to="/" className="flex items-center gap-2.5">
+            <Mark />
             <span className="text-lg font-semibold tracking-tight">Plumbline</span>
             <span className="hidden text-xs text-slate-500 sm:inline">
               Stellar anchor conformance
@@ -34,7 +63,17 @@ export function Layout() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
+      {/*
+       * A horizon line under the nav: a faint top-light gradient strip that
+       * gives the white grade cards something to sit on instead of flat
+       * grey. Decorative only — the single <Outlet /> stays in <main>.
+       */}
+      <div
+        aria-hidden="true"
+        className="h-10 border-b border-slate-100 bg-gradient-to-b from-white to-slate-50 sm:h-14"
+      />
+
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
         <Outlet />
       </main>
 
@@ -45,8 +84,8 @@ export function Layout() {
 
 function Footer() {
   return (
-    <footer className="mt-10 border-t border-slate-200 bg-white">
-      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 text-sm text-slate-600 sm:grid-cols-2 sm:px-6">
+    <footer className="mt-12 border-t border-slate-100 bg-white">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm text-slate-600 sm:grid-cols-2 sm:px-6">
         <div>
           <h2 className="text-xs font-semibold tracking-wide text-slate-900 uppercase">
             What this tests, and what it never will
