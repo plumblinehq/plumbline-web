@@ -4,6 +4,7 @@ import {
   countByStatus,
   EMPTY_VALUE,
   formatCounts,
+  formatErrorCaveat,
   formatDuration,
   formatElapsed,
   formatRelativeTime,
@@ -208,5 +209,28 @@ describe('sepLabel', () => {
   it('labels a SEP the way the specs do', () => {
     expect(sepLabel(1)).toBe('SEP-1');
     expect(sepLabel(10)).toBe('SEP-10');
+  });
+});
+
+describe('formatErrorCaveat', () => {
+  it('returns a caveat when checks could not run', () => {
+    expect(formatErrorCaveat(3)).toBe('*3 checks could not run');
+  });
+
+  it('singles out one errored check', () => {
+    expect(formatErrorCaveat(1)).toBe('*1 check could not run');
+  });
+
+  it('marks nothing when every check ran, so a clean score stays clean', () => {
+    expect(formatErrorCaveat(0)).toBeNull();
+  });
+
+  it('marks nothing when there is no run', () => {
+    expect(formatErrorCaveat(null)).toBeNull();
+  });
+
+  it('treats a non-integer as no data rather than rendering it', () => {
+    expect(formatErrorCaveat(Number.NaN)).toBeNull();
+    expect(formatErrorCaveat(1.5)).toBeNull();
   });
 });

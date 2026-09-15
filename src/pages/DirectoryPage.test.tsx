@@ -14,6 +14,7 @@ const ANCHOR: AnchorSummary = {
   lastRunId: '75',
   lastRunAt: '2026-09-14T10:39:06.393Z',
   lastRunStatus: 'complete',
+  lastRunErrorCount: 0,
   overallScore: 0.9,
   grades: [
     { sep: 1, score: 0.8, applicable: true },

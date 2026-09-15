@@ -1,5 +1,5 @@
 import type { Grade } from '../api/types';
-import { formatScore, sepLabel } from '../lib/format';
+import { formatErrorCaveat, formatScore, sepLabel } from '../lib/format';
 import { ScoreBar } from './ScoreBadge';
 
 /**
@@ -10,23 +10,40 @@ import { ScoreBar } from './ScoreBadge';
 export function GradeSummary({
   overallScore,
   grades,
+  erroredCount,
 }: {
   overallScore: number | null;
   grades: readonly Grade[];
+  /** Checks the latest run could not complete. Excluded from the score, but never hidden. */
+  erroredCount?: number | null;
 }) {
+  const caveat = formatErrorCaveat(erroredCount ?? null);
+
   return (
     <div className="grid gap-5 px-4 py-4 sm:grid-cols-[minmax(0,10rem)_1fr]">
       <div>
         <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">Overall</p>
         <p className="mt-1 text-3xl font-semibold tabular-nums text-slate-900">
           {formatScore(overallScore)}
+          {caveat === null ? null : (
+            <span aria-hidden="true" className="align-top text-lg text-amber-700">
+              *
+            </span>
+          )}
         </p>
         <div className="mt-2">
           <ScoreBar score={overallScore} />
         </div>
-        <p className="mt-2 text-xs text-slate-500">
-          The share of applicable <code className="font-mono">MUST</code> checks that passed.
-        </p>
+        {caveat === null ? (
+          <p className="mt-2 text-xs text-slate-500">
+            The share of applicable <code className="font-mono">MUST</code> checks that passed.
+          </p>
+        ) : (
+          <p className="mt-2 text-xs text-amber-700">
+            <span>{caveat}</span> — those results are excluded from this score because Plumbline
+            could not complete them, so the score covers only the checks that ran.
+          </p>
+        )}
       </div>
 
       <div>

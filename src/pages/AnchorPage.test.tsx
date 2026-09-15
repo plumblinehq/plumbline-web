@@ -235,6 +235,77 @@ describe('AnchorPage', () => {
     ).toBeInTheDocument();
   });
 
+  it('marks the grade when the latest run had checks Plumbline could not complete', async () => {
+    // Copied from the live API (2026-09-15): mykobo.co's run shows 24 pass,
+    // 3 error, 25 skip and a 100% score. The errors are Plumbline's own
+    // network failures — excluded from the score, but never hidden.
+    const withErrors: AnchorDetail = {
+      ...DETAIL,
+      latestRun: {
+        ...DETAIL.latestRun!,
+        overallScore: 1,
+        grades: [{ sep: 1, score: 1, applicable: true }],
+        results: [
+          {
+            checkId: 'sep10.challenge-returns-200',
+            sep: 10,
+            status: 'error',
+            severity: 'error',
+            message: 'Plumbline failed to run this check: fetch failed',
+            specRef: null,
+            evidence: [],
+            durationMs: 409,
+            title: 'the challenge endpoint returns 200',
+          },
+        ],
+      },
+    };
+    renderPage(withErrors);
+
+    await screen.findByText('100.0%', { selector: 'p' });
+    expect(screen.getByText('*1 check could not run')).toBeInTheDocument();
+  });
+
+  it('leaves the grade unmarked when every check in the latest run completed', async () => {
+    renderPage(DETAIL);
+
+    await screen.findByText('90.0%', { selector: 'p' });
+    expect(screen.queryByText(/could not run/)).not.toBeInTheDocument();
+  });
+
+  it('links a check result to the clause it enforces in the SEP document', async () => {
+    const detailed: AnchorDetail = {
+      ...DETAIL,
+      latestRun: {
+        ...DETAIL.latestRun!,
+        results: [
+          {
+            checkId: 'sep1.toml-cors',
+            sep: 1,
+            status: 'fail',
+            severity: 'error',
+            message: 'The response did not include Access-Control-Allow-Origin.',
+            specRef: 'SEP-1 §Specification, CORS',
+            evidence: [],
+            durationMs: 12,
+            title: 'the stellar.toml sets the CORS header',
+          },
+        ],
+      },
+    };
+    renderPage(detailed);
+
+    const row = await screen.findByText('the stellar.toml sets the CORS header');
+    await userEvent.setup().click(row);
+
+    expect(
+      screen.getByRole('link', { name: 'SEP-1 §Specification, CORS' }),
+    ).toHaveAttribute(
+      'href',
+      'https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0001.md#specification',
+    );
+  });
+
   it('shows a not-found error for an unknown anchor', async () => {
     stubApi({
       '/api/anchors/testanchor.stellar.org': () =>
