@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { CheckRow } from './CheckRow';
-import type { CheckResult } from '../api/types';
+import type { CheckResult, Evidence } from '../api/types';
 
 const FAILING: CheckResult = {
   checkId: 'sep10.challenge-decodes',
@@ -71,6 +71,36 @@ describe('CheckRow', () => {
     await user.click(screen.getByText('the challenge transaction decodes as XDR'));
 
     expect(screen.getByText(/truncates a stored body to 2 KB/)).toBeInTheDocument();
+  });
+
+  it('renders a headerless exchange as a normal state, the shape the checks package stores for image fetches', async () => {
+    // Fixture copied from the live API (2026-09-15): `sep1.currency-image-reachable`
+    // records the exchange with a body but no `headers` field. Before the fix,
+    // rendering this row threw `TypeError: Cannot convert undefined or null to
+    // object` and took the whole anchor page into the error boundary.
+    const HEADERLESS: CheckResult = {
+      ...FAILING,
+      checkId: 'sep1.currency-image-reachable',
+      title: 'every advertised currency image is reachable',
+      message: null,
+      evidence: [
+        {
+          method: 'GET',
+          url: 'https://static.anclap.com/coin/pen.png',
+          statusCode: 200,
+          body: 'png bytes',
+        } as Evidence,
+      ],
+    };
+    const user = userEvent.setup();
+    render(<CheckRow result={HEADERLESS} />);
+
+    await user.click(screen.getByText('every advertised currency image is reachable'));
+
+    expect(
+      screen.getByText('No response headers were recorded for this exchange.'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('200')).toBeInTheDocument();
   });
 
   it('explains a missing evidence list rather than showing an empty block', async () => {

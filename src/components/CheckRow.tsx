@@ -78,7 +78,7 @@ function EvidenceList({ evidence }: { evidence: readonly Evidence[] }) {
             <span className="tabular-nums text-slate-500">{item.statusCode}</span>
           </div>
 
-          {Object.keys(item.headers).length > 0 ? (
+          {item.headers !== undefined && Object.keys(item.headers).length > 0 ? (
             <dl className="grid grid-cols-[minmax(0,10rem)_1fr] gap-x-3 gap-y-0.5 px-3 py-2 text-xs">
               {Object.entries(item.headers).map(([name, value]) => (
                 <div key={name} className="contents">
@@ -89,7 +89,11 @@ function EvidenceList({ evidence }: { evidence: readonly Evidence[] }) {
                 </div>
               ))}
             </dl>
-          ) : null}
+          ) : (
+            <p className="px-3 py-2 text-xs text-slate-500">
+              No response headers were recorded for this exchange.
+            </p>
+          )}
 
           {item.body ? (
             <div className="border-t border-slate-200">

@@ -23,6 +23,12 @@ export interface Evidence {
   method: string;
   url: string;
   statusCode: number;
+  /**
+   * The checks package records headers only on exchanges where headers are
+   * the point (CORS, content type), so the API omits this field on image and
+   * body-only fetches. The client normalises those to an empty map here so
+   * the type is true of every item a component receives.
+   */
   headers: Record<string, string>;
   /** Response body, truncated and redacted by the checks package before storage. */
   body?: string;

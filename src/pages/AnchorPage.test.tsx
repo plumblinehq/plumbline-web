@@ -1,4 +1,5 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import { AnchorPage } from './AnchorPage';
@@ -146,6 +147,92 @@ describe('AnchorPage', () => {
 
     expect(await screen.findByRole('link', { name: '#75' })).toHaveAttribute('href', '/run/75');
     expect(screen.getByText('38 pass · 3 fail · 11 skip')).toBeInTheDocument();
+  });
+
+  it('renders the raw wire shape behind the live anchor pages', async () => {
+    // Regression, 2026-09-15: every anchor page crashed into the error
+    // boundary with `TypeError: Cannot convert undefined or null to object`.
+    // The cause was evidence items recorded without a `headers` field — the
+    // checks package stores headers only where headers are the point — which
+    // reached `Object.keys(item.headers)` in CheckRow unnormalised. This test
+    // returns the payload exactly as the API serialises it (evidence as a
+    // JSON *string*, items without `headers`) and asserts the page renders.
+    const WIRE = {
+      id: '1',
+      homeDomain: 'anclap.com',
+      network: 'pubnet',
+      displayName: 'Anclap',
+      addedAt: '2026-09-09T19:42:09.623Z',
+      optedOut: false,
+      optOutNote: null,
+      latestRun: {
+        id: '75',
+        anchorId: '1',
+        homeDomain: 'anclap.com',
+        network: 'pubnet',
+        startedAt: '2026-09-14T10:39:06.393Z',
+        finishedAt: '2026-09-14T10:39:21.761Z',
+        status: 'complete',
+        overallScore: 0.9,
+        checksLibVersion: '0.2.3',
+        grades: [
+          { sep: 1, score: 0.8, applicable: true },
+          { sep: 10, score: 1, applicable: true },
+        ],
+        results: [
+          {
+            checkId: 'sep1.currency-image-reachable',
+            sep: 1,
+            status: 'pass',
+            severity: 'warning',
+            message: null,
+            specRef: null,
+            evidence: JSON.stringify([
+              {
+                method: 'GET',
+                url: 'https://static.anclap.com/coin/pen.png',
+                statusCode: 200,
+                body: 'png bytes',
+              },
+            ]),
+            durationMs: 340,
+            title: 'every advertised currency image is reachable',
+          },
+          {
+            checkId: 'sep1.toml-cors',
+            sep: 1,
+            status: 'pass',
+            severity: 'info',
+            message: null,
+            specRef: null,
+            evidence: '[]',
+            durationMs: 210,
+            title: 'stellar.toml is served with CORS headers',
+          },
+        ],
+      },
+    };
+    stubApi({
+      '/api/anchors/anclap.com': () => jsonResponse(WIRE),
+      '/api/anchors/anclap.com/history': () => jsonResponse([]),
+      '/api/anchors/anclap.com/runs': () => jsonResponse([]),
+    });
+
+    renderWithProviders(
+      <Routes>
+        <Route path="/anchor/:homeDomain" element={<AnchorPage />} />
+      </Routes>,
+      { route: '/anchor/anclap.com' },
+    );
+
+    expect(await screen.findByRole('heading', { name: 'Anclap' })).toBeInTheDocument();
+
+    const row = screen.getByText('every advertised currency image is reachable');
+    await userEvent.setup().click(row);
+
+    expect(
+      screen.getByText('No response headers were recorded for this exchange.'),
+    ).toBeInTheDocument();
   });
 
   it('shows a not-found error for an unknown anchor', async () => {

@@ -99,6 +99,43 @@ describe('parseEvidence', () => {
     ]);
     expect(parseEvidence(raw)).toHaveLength(1);
   });
+
+  it('defaults missing headers to an empty map, the shape body-only exchanges have on the wire', () => {
+    // Captured verbatim from the live API (2026-09-15): image fetches such as
+    // `sep1.currency-image-reachable` record no `headers` field at all.
+    const raw = JSON.stringify([
+      {
+        method: 'GET',
+        url: 'https://static.anclap.com/coin/pen.png',
+        statusCode: 200,
+        body: '\uFFFDPNG bytes',
+      },
+    ]);
+    const [item] = parseEvidence(raw);
+    expect(item?.headers).toEqual({});
+    expect(item?.body).toBe('\uFFFDPNG bytes');
+  });
+
+  it('replaces a null or non-object headers value rather than passing it through', () => {
+    const raw = JSON.stringify([
+      { method: 'GET', url: 'https://a.example', statusCode: 200, headers: null },
+      { method: 'GET', url: 'https://b.example', statusCode: 200, headers: 'not a map' },
+    ]);
+    expect(parseEvidence(raw)[0]?.headers).toEqual({});
+    expect(parseEvidence(raw)[1]?.headers).toEqual({});
+  });
+
+  it('keeps headers that are present', () => {
+    const raw = JSON.stringify([
+      {
+        method: 'GET',
+        url: 'https://a.example/.well-known/stellar.toml',
+        statusCode: 200,
+        headers: { 'access-control-allow-origin': '*' },
+      },
+    ]);
+    expect(parseEvidence(raw)[0]?.headers).toEqual({ 'access-control-allow-origin': '*' });
+  });
 });
 
 describe('createApiClient', () => {
@@ -140,6 +177,35 @@ describe('createApiClient', () => {
 
     expect(run.results[0]?.evidence).toHaveLength(1);
     expect(run.results[1]?.evidence).toEqual([]);
+  });
+
+  it('normalises the headerless evidence the live API returns for image and body-only fetches', async () => {
+    // The payload shape that crashed the anchor page: `evidence` arrives as a
+    // JSON string whose items carry a body but no `headers` field.
+    const wire = {
+      id: '1',
+      latestRun: {
+        id: '75',
+        results: [
+          {
+            checkId: 'sep1.currency-image-reachable',
+            evidence: JSON.stringify([
+              {
+                method: 'GET',
+                url: 'https://static.anclap.com/coin/pen.png',
+                statusCode: 200,
+                body: 'png bytes',
+              },
+            ]),
+          },
+        ],
+      },
+    };
+    const { fetchImpl } = recordingFetch(jsonResponse(wire));
+
+    const detail = await createApiClient({ baseUrl, fetch: fetchImpl }).getAnchor('anclap.com');
+
+    expect(detail.latestRun?.results[0]?.evidence[0]?.headers).toEqual({});
   });
 
   it('treats a missing results array as an empty run rather than crashing the page', async () => {

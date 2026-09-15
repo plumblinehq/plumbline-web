@@ -70,7 +70,7 @@ export function parseEvidence(raw: unknown): Evidence[] {
     return [];
   }
 
-  return parsed.filter(isEvidence);
+  return parsed.filter(isEvidence).map(normaliseEvidence);
 }
 
 function isEvidence(value: unknown): value is Evidence {
@@ -83,6 +83,24 @@ function isEvidence(value: unknown): value is Evidence {
     typeof candidate.url === 'string' &&
     typeof candidate.statusCode === 'number'
   );
+}
+
+/**
+ * `headers` is absent on exchanges the checks package recorded without them —
+ * image and body-only fetches, which is most evidence items on a real run —
+ * and has been observed as `undefined` in the live API. Defaulting it here,
+ * at the boundary, is what makes `Evidence['headers']` true of every item a
+ * component ever receives; `Object.keys(undefined)` in a component would
+ * otherwise take the whole anchor page down with a render-time TypeError.
+ * Non-object header values are replaced the same way rather than trusted.
+ */
+function normaliseEvidence(evidence: Evidence): Evidence {
+  const headers = evidence.headers;
+  return {
+    ...evidence,
+    headers:
+      typeof headers === 'object' && headers !== null && !Array.isArray(headers) ? headers : {},
+  };
 }
 
 /** Builds the query string for `/api/anchors`, omitting unset filters. */
