@@ -1,6 +1,7 @@
 import type { CheckResult, Evidence } from '../api/types';
 import { formatDuration } from '../lib/format';
 import { SeverityTag } from './SeverityTag';
+import { SpecRefLink } from './SpecRefLink';
 import { StatusPill } from './StatusPill';
 
 /**
@@ -43,7 +44,9 @@ export function CheckRow({ result }: { result: CheckResult }) {
 
           <dl className="grid grid-cols-[7rem_1fr] gap-x-3 gap-y-1 text-xs">
             <dt className="text-slate-500">Spec reference</dt>
-            <dd className="text-slate-700">{result.specRef ?? '—'}</dd>
+            <dd className="text-slate-700">
+              <SpecRefLink specRef={result.specRef} />
+            </dd>
             <dt className="text-slate-500">Duration</dt>
             <dd className="tabular-nums text-slate-700">{formatDuration(result.durationMs)}</dd>
           </dl>

@@ -57,6 +57,22 @@ describe('ChecksPage', () => {
     expect(screen.getByText('sep10.challenge-decodes')).toBeInTheDocument();
   });
 
+  it('links each clause to its section in the SEP document', async () => {
+    renderPage();
+
+    const success = await screen.findByRole('link', { name: 'SEP-10 §Response (Success)' });
+    expect(success).toHaveAttribute(
+      'href',
+      'https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0010.md#success',
+    );
+
+    const general = screen.getByRole('link', { name: 'SEP-1 §General Information' });
+    expect(general).toHaveAttribute(
+      'href',
+      'https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0001.md#general-information',
+    );
+  });
+
   it('shows severity as the spec wording it was derived from', async () => {
     renderPage();
     await screen.findByText('VERSION is declared');
