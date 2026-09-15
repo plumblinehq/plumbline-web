@@ -9,3 +9,37 @@
 :root {
   color-scheme: light;
 }
+
+/*
+ * Typography. Inter carries the interface and JetBrains Mono carries the
+ * machine identifiers (check IDs, domains, XDR) — the mono face signals
+ * "evidence you can diff" the way the evidence panels mean it. Both are
+ * self-hosted through Fontsource (see main.tsx), so the page makes no
+ * third-party request to render.
+ */
+@theme {
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /*
+   * Grade tones. The pill fills (emerald-50 and friends) are pinned by tests
+   * and stay as they are; these tokens are the readable-on-white partners for
+   * large type and glyphs, taken from the same Tailwind ramps so the page
+   * never mixes palettes. A tone decides a colour, never a grade — the
+   * methodology page says so explicitly.
+   */
+  --color-grade-good: oklch(59.6% 0.145 163.225); /* emerald-600 */
+  --color-grade-fair: oklch(66.6% 0.179 58.318); /* amber-600 */
+  --color-grade-poor: oklch(63.7% 0.237 25.331); /* rose-600 */
+  --color-grade-unknown: oklch(55.4% 0.046 257.417); /* slate-500 */
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv05' 1; /* Inter: lowercase l with a tail, unambiguous next to I and 1 */
+}
