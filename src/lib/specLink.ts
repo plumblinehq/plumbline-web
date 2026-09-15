@@ -13,7 +13,7 @@
 
 const SPEC_BASE = 'https://github.com/stellar/stellar-protocol/blob/master/ecosystem';
 
-/** slug(section heading), verified against the SEP-1 document (v2.9.0). */
+/** slug(section heading), verified against the SEP-1 document (v2.7.0). */
 const SEP1 = {
   generalInformation: 'general-information',
   specification: 'specification',
@@ -22,7 +22,7 @@ const SEP1 = {
   validatorInformation: 'validator-information',
 };
 
-/** slug(section heading), verified against the SEP-10 document (v3.4.0). */
+/** slug(section heading), verified against the SEP-10 document (v3.4.1). */
 const SEP10 = {
   authenticationEndpoint: 'authentication-endpoint',
   crossOriginHeaders: 'cross-origin-headers',
