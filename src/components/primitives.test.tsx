@@ -15,13 +15,13 @@ describe('ScoreBadge', () => {
 
   it('colours by tone so a column can be scanned', () => {
     const { rerender } = render(<ScoreBadge score={0.95} />);
-    expect(screen.getByText('95.0%')).toHaveClass('bg-emerald-50');
+    expect(screen.getByText('95.0%')).toHaveClass('text-emerald-300');
 
     rerender(<ScoreBadge score={0.8} />);
-    expect(screen.getByText('80.0%')).toHaveClass('bg-amber-50');
+    expect(screen.getByText('80.0%')).toHaveClass('text-amber-300');
 
     rerender(<ScoreBadge score={0.2} />);
-    expect(screen.getByText('20.0%')).toHaveClass('bg-rose-50');
+    expect(screen.getByText('20.0%')).toHaveClass('text-rose-300');
   });
 
   it('renders a missing score as a dash and not as zero', () => {

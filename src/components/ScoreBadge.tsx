@@ -2,13 +2,19 @@ import { formatScore, scoreTone, type ScoreTone } from '../lib/format';
 
 /**
  * The tone classes are written out in full because Tailwind scans source text:
- * a class assembled at runtime would never be generated.
+ * a class assembled at runtime would never be generated. On the dark surface
+ * the tone is carried by the 300-level text — the readable part, and what the
+ * test pins — over a 15% tint of the same hue with a hairline ring, the same
+ * chip language as the network and caveat tags. As supplementary signals
+ * these sit around 3:1 contrast, on par with the pale-on-light chips they
+ * replaced; the tone is repeated in the glyphs and rails so nothing rides on
+ * colour alone.
  */
 const TONE_PILL: Record<ScoreTone, string> = {
-  good: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-  fair: 'bg-amber-50 text-amber-700 ring-amber-200',
-  poor: 'bg-rose-50 text-rose-700 ring-rose-200',
-  unknown: 'bg-slate-100 text-slate-500 ring-slate-200',
+  good: 'bg-emerald-400/15 text-emerald-300 ring-1 ring-emerald-400/40 ring-inset',
+  fair: 'bg-amber-400/15 text-amber-300 ring-1 ring-amber-400/40 ring-inset',
+  poor: 'bg-rose-400/15 text-rose-300 ring-1 ring-rose-400/40 ring-inset',
+  unknown: 'bg-raised text-ink-faint ring-1 ring-line ring-inset',
 };
 
 const TONE_BAR: Record<ScoreTone, string> = {
