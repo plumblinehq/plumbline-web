@@ -1,38 +1,68 @@
 @import 'tailwindcss';
 
 /*
- * The directory is a light-only publication: it is read in the browser next to
- * an anchor's own docs, and a half-implemented dark mode would be worse than
- * none. Tailwind v4 is wired through @tailwindcss/vite, so there is no
- * tailwind.config.js to keep in sync — the theme lives in CSS.
+ * The palette is a deliberate single theme: a deep blue-slate canvas with one
+ * warm signal colour, after the manner of an observability console. Status
+ * colours (pass/fail/skip/error) stay functional and literal — the pale pill
+ * fills are pinned by tests and read as status LEDs against the dark cards —
+ * so everything decorative around them moves, and nothing semantic does.
  */
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 /*
- * Typography. Inter carries the interface and JetBrains Mono carries the
- * machine identifiers (check IDs, domains, XDR) — the mono face signals
- * "evidence you can diff" the way the evidence panels mean it. Both are
- * self-hosted through Fontsource (see main.tsx), so the page makes no
- * third-party request to render.
+ * Typography. Bricolage Grotesque carries headings, Inter carries the
+ * interface, and JetBrains Mono carries the machine identifiers (check IDs,
+ * domains, XDR) — the mono face signals "evidence you can diff" the way the
+ * evidence panels mean it. All three are self-hosted through Fontsource (see
+ * main.tsx), so the page makes no third-party request to render. The
+ * family names must match what the variable-font packages register:
+ * 'Inter Variable', 'JetBrains Mono Variable', 'Bricolage Grotesque Variable'.
  */
 @theme {
+  --font-display:
+    'Bricolage Grotesque Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-sans:
-    'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    'Inter Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-mono:
+    'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /*
-   * Grade tones. The pill fills (emerald-50 and friends) are pinned by tests
-   * and stay as they are; these tokens are the readable-on-white partners for
-   * large type and glyphs, taken from the same Tailwind ramps so the page
-   * never mixes palettes. A tone decides a colour, never a grade — the
+   * Surfaces. Canvas is the page, surface is a card, raised is an inset or
+   * hover state; line and line-soft are the hairline borders that separate
+   * them. All sit on one blue-slate hue so the page never mixes ramps.
+   */
+  --color-canvas: oklch(19% 0.035 257);
+  --color-surface: oklch(24% 0.04 257);
+  --color-raised: oklch(30% 0.045 257);
+  --color-line: oklch(35% 0.045 257);
+  --color-line-soft: oklch(29% 0.04 257);
+
+  /* Ink, in three steps on the same hue. */
+  --color-ink: oklch(93% 0.012 257);
+  --color-ink-soft: oklch(75% 0.025 257);
+  --color-ink-faint: oklch(58% 0.03 257);
+
+  /*
+   * The one accent. Amber-400 carries the brand mark, links, active
+   * navigation and the chart's overall line — the warm signal on the cold
+   * canvas that says "live". Nothing else gets to use colour for decoration,
+   * which is what keeps the grade statuses the loudest thing on screen.
+   */
+  --color-signal: oklch(82.8% 0.189 84.429); /* Tailwind amber-400 */
+  --color-signal-soft: oklch(87% 0.169 91.76); /* Tailwind amber-300, hover partner */
+
+  /*
+   * Grade tones. Same semantics as the light theme, values moved to the
+   * luminous 400 ramp so a grade stays readable on the dark canvas next to
+   * the amber signal. A tone decides a colour, never a grade — the
    * methodology page says so explicitly.
    */
-  --color-grade-good: oklch(59.6% 0.145 163.225); /* emerald-600 */
-  --color-grade-fair: oklch(66.6% 0.179 58.318); /* amber-600 */
-  --color-grade-poor: oklch(63.7% 0.237 25.331); /* rose-600 */
-  --color-grade-unknown: oklch(55.4% 0.046 257.417); /* slate-500 */
+  --color-grade-good: oklch(76.5% 0.177 163.223); /* emerald-400 */
+  --color-grade-fair: oklch(82.8% 0.189 84.429); /* amber-400 */
+  --color-grade-poor: oklch(71.2% 0.194 13.428); /* rose-400 */
+  --color-grade-unknown: oklch(70.4% 0.04 256.788); /* slate-400 */
 }
 
 html {
@@ -42,4 +72,14 @@ html {
 body {
   text-rendering: optimizeLegibility;
   font-feature-settings: 'cv05' 1; /* Inter: lowercase l with a tail, unambiguous next to I and 1 */
+}
+
+/* Keyboard focus gets the signal colour everywhere, consistently. */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in oklch, var(--color-signal) 30%, transparent);
 }
