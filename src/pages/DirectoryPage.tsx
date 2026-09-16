@@ -44,17 +44,17 @@ export function DirectoryPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       {/*
        * The hero: one sentence of what this is, set large in the display
        * face, so the first screen answers "what am I looking at" before any
        * data asks to be parsed.
        */}
-      <header className="max-w-3xl">
-        <h1 className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-ink sm:text-5xl">
+      <header className="border-b border-line-soft pb-8">
+        <h1 className="max-w-3xl font-display text-4xl font-bold leading-[1.1] tracking-tight text-ink sm:text-5xl">
           Stellar anchor conformance directory
         </h1>
-        <p className="mt-3 text-sm font-medium tracking-wide text-signal uppercase">
+        <p className="mt-3 max-w-3xl text-sm font-medium tracking-wide text-signal uppercase">
           Every public anchor, graded against the SEPs it claims
         </p>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-soft">
