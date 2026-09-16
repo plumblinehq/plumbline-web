@@ -14,7 +14,7 @@ const API_BASE = 'https://plumbline-server.onrender.com';
 
 function Code({ children }: { children: string }) {
   return (
-    <pre className="overflow-x-auto rounded-md bg-slate-900 px-3 py-2 text-xs leading-relaxed text-slate-100">
+    <pre className="overflow-x-auto rounded-md bg-canvas px-3 py-2 text-xs leading-relaxed text-ink-soft ring-1 ring-line ring-inset">
       <code>{children}</code>
     </pre>
   );
@@ -22,7 +22,7 @@ function Code({ children }: { children: string }) {
 
 function Row({ cells }: { cells: readonly [string, string, string] }) {
   return (
-    <tr className="border-b border-slate-100 last:border-0">
+    <tr className="border-b border-line-soft last:border-0">
       <td className="px-2 py-2 align-top font-mono text-xs">{cells[0]}</td>
       <td className="px-2 py-2 align-top text-xs">{cells[1]}</td>
       <td className="px-2 py-2 align-top text-xs">{cells[2]}</td>
@@ -35,13 +35,13 @@ function RouteTable({ rows }: { rows: readonly (readonly [string, string, string
     <div className="overflow-x-auto px-4 py-4">
       <table className="w-full min-w-[42rem] border-collapse text-sm">
         <thead>
-          <tr className="border-b border-slate-200 text-left text-xs tracking-wide text-slate-500 uppercase">
+          <tr className="border-b border-line text-left text-xs tracking-wide text-ink-faint uppercase">
             <th scope="col" className="px-2 py-2 font-medium">Route</th>
             <th scope="col" className="px-2 py-2 font-medium">Parameters</th>
             <th scope="col" className="px-2 py-2 font-medium">Response</th>
           </tr>
         </thead>
-        <tbody className="text-slate-700">{rows.map((r) => <Row key={r[0]} cells={r} />)}</tbody>
+        <tbody className="text-ink-soft">{rows.map((r) => <Row key={r[0]} cells={r} />)}</tbody>
       </table>
     </div>
   );
@@ -127,10 +127,10 @@ export function DocsPage() {
   return (
     <div className="space-y-4">
       <header>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Documentation</h1>
-        <p className="mt-1 max-w-3xl text-sm text-slate-600">
+        <h1 className="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">Documentation</h1>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ink-soft">
           How to run the checks yourself, the public API behind{' '}
-          <Link to="/" className="underline decoration-slate-300">the directory</Link>, and how to
+          <Link to="/" className="underline decoration-line underline-offset-2 transition-colors hover:text-signal">the directory</Link>, and how to
           contribute. Everything on this page is generated from the real code — commands match the
           CLI, routes match the server, and the field tables match the wire.
         </p>
@@ -141,7 +141,7 @@ export function DocsPage() {
             ['#methodology', 'Methodology'],
             ['#contributing', 'Contributing'],
           ].map(([href, label]) => (
-            <a key={href} href={href} className="text-slate-500 underline decoration-slate-300 hover:text-slate-900">
+            <a key={href} href={href} className="text-ink-faint underline decoration-line underline-offset-2 transition-colors hover:text-signal">
               {label}
             </a>
           ))}
@@ -154,7 +154,7 @@ export function DocsPage() {
           title="Run the checks yourself"
           description="The same checks the hosted directory runs, as a library and a CLI."
         />
-        <div className="space-y-4 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-4 px-4 py-4 text-sm text-ink-soft">
           <p>
             <code className="font-mono text-xs">@plumblinehq/plumbline-checks</code> is published to
             npm. The CLI needs no configuration and touches nothing but the anchor you name:
@@ -211,7 +211,7 @@ console.log(all().length); // every registered check, browsable via checks list`
           title="Public API"
           description={`Base URL: ${API_BASE} — no key, CORS open to GET/HEAD/OPTIONS.`}
         />
-        <div className="space-y-4 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-4 px-4 py-4 text-sm text-ink-soft">
           <RouteTable
             rows={[
               ['GET /api/anchors', 'network, sep, min_score (0–1), sort=name|score', 'AnchorSummary[]'],
@@ -233,72 +233,72 @@ console.log(all().length); // every registered check, browsable via checks list`
             below are the contract.
           </p>
 
-          <h3 className="pt-2 text-sm font-semibold text-slate-900">AnchorSummary</h3>
+          <h3 className="pt-2 font-display text-sm font-semibold text-ink">AnchorSummary</h3>
           <dl className="grid gap-1.5 text-xs">
             {ANCHOR_SUMMARY_FIELDS.map(([name, desc]) => (
               <div key={name} className="grid grid-cols-[14rem_1fr] gap-3">
-                <dt className="font-mono text-slate-900">{name}</dt>
-                <dd className="text-slate-600">{desc}</dd>
+                <dt className="font-mono text-ink">{name}</dt>
+                <dd className="text-ink-soft">{desc}</dd>
               </div>
             ))}
           </dl>
 
-          <h3 className="pt-2 text-sm font-semibold text-slate-900">Grade</h3>
+          <h3 className="pt-2 font-display text-sm font-semibold text-ink">Grade</h3>
           <dl className="grid gap-1.5 text-xs">
             {GRADE_FIELDS.map(([name, desc]) => (
               <div key={name} className="grid grid-cols-[14rem_1fr] gap-3">
-                <dt className="font-mono text-slate-900">{name}</dt>
-                <dd className="text-slate-600">{desc}</dd>
+                <dt className="font-mono text-ink">{name}</dt>
+                <dd className="text-ink-soft">{desc}</dd>
               </div>
             ))}
           </dl>
 
-          <h3 className="pt-2 text-sm font-semibold text-slate-900">Run</h3>
+          <h3 className="pt-2 font-display text-sm font-semibold text-ink">Run</h3>
           <dl className="grid gap-1.5 text-xs">
             {RUN_FIELDS.map(([name, desc]) => (
               <div key={name} className="grid grid-cols-[14rem_1fr] gap-3">
-                <dt className="font-mono text-slate-900">{name}</dt>
-                <dd className="text-slate-600">{desc}</dd>
+                <dt className="font-mono text-ink">{name}</dt>
+                <dd className="text-ink-soft">{desc}</dd>
               </div>
             ))}
           </dl>
 
-          <h3 className="pt-2 text-sm font-semibold text-slate-900">CheckResult</h3>
+          <h3 className="pt-2 font-display text-sm font-semibold text-ink">CheckResult</h3>
           <dl className="grid gap-1.5 text-xs">
             {CHECK_RESULT_FIELDS.map(([name, desc]) => (
               <div key={name} className="grid grid-cols-[14rem_1fr] gap-3">
-                <dt className="font-mono text-slate-900">{name}</dt>
-                <dd className="text-slate-600">{desc}</dd>
+                <dt className="font-mono text-ink">{name}</dt>
+                <dd className="text-ink-soft">{desc}</dd>
               </div>
             ))}
           </dl>
 
-          <h3 className="pt-2 text-sm font-semibold text-slate-900">RunSummary</h3>
+          <h3 className="pt-2 font-display text-sm font-semibold text-ink">RunSummary</h3>
           <dl className="grid gap-1.5 text-xs">
             {RUN_SUMMARY_FIELDS.map(([name, desc]) => (
               <div key={name} className="grid grid-cols-[14rem_1fr] gap-3">
-                <dt className="font-mono text-slate-900">{name}</dt>
-                <dd className="text-slate-600">{desc}</dd>
+                <dt className="font-mono text-ink">{name}</dt>
+                <dd className="text-ink-soft">{desc}</dd>
               </div>
             ))}
           </dl>
 
-          <h3 className="pt-2 text-sm font-semibold text-slate-900">HistoryPoint</h3>
+          <h3 className="pt-2 font-display text-sm font-semibold text-ink">HistoryPoint</h3>
           <dl className="grid gap-1.5 text-xs">
             {HISTORY_FIELDS.map(([name, desc]) => (
               <div key={name} className="grid grid-cols-[14rem_1fr] gap-3">
-                <dt className="font-mono text-slate-900">{name}</dt>
-                <dd className="text-slate-600">{desc}</dd>
+                <dt className="font-mono text-ink">{name}</dt>
+                <dd className="text-ink-soft">{desc}</dd>
               </div>
             ))}
           </dl>
 
-          <h3 className="pt-2 text-sm font-semibold text-slate-900">CheckDefinition</h3>
+          <h3 className="pt-2 font-display text-sm font-semibold text-ink">CheckDefinition</h3>
           <dl className="grid gap-1.5 text-xs">
             {CATALOGUE_FIELDS.map(([name, desc]) => (
               <div key={name} className="grid grid-cols-[14rem_1fr] gap-3">
-                <dt className="font-mono text-slate-900">{name}</dt>
-                <dd className="text-slate-600">{desc}</dd>
+                <dt className="font-mono text-ink">{name}</dt>
+                <dd className="text-ink-soft">{desc}</dd>
               </div>
             ))}
           </dl>
@@ -308,11 +308,11 @@ console.log(all().length); // every registered check, browsable via checks list`
       <Panel>
         <span id="methodology" className="block scroll-mt-20" />
         <PanelHeader title="Methodology" />
-        <div className="space-y-3 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-3 px-4 py-4 text-sm text-ink-soft">
           <p>
             How a grade is computed, what the statuses mean, what Plumbline deliberately does not
             test, and its relationship to SDF’s anchor-tests are all on the{' '}
-            <Link to="/about" className="underline decoration-slate-300">methodology page</Link>.
+            <Link to="/about" className="underline decoration-line underline-offset-2 transition-colors hover:text-signal">methodology page</Link>.
             That page is the single source of truth for the scoring rules — this docs page
             deliberately does not restate them, because two copies of a rule eventually disagree.
           </p>
@@ -325,14 +325,14 @@ console.log(all().length); // every registered check, browsable via checks list`
           title="Contributing"
           description="Three repos, one discipline: every assertion traces to real spec text."
         />
-        <div className="space-y-4 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-4 px-4 py-4 text-sm text-ink-soft">
           <p>
             Plumbline is three repositories, and the boundaries are hard:
           </p>
           <ul className="list-disc space-y-1 pl-4">
             <li>
               <a
-                className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+                className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
                 href="https://github.com/plumblinehq/plumbline-checks"
               >
                 plumbline-checks
@@ -342,7 +342,7 @@ console.log(all().length); // every registered check, browsable via checks list`
             </li>
             <li>
               <a
-                className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+                className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
                 href="https://github.com/plumblinehq/plumbline-server"
               >
                 plumbline-server
@@ -352,7 +352,7 @@ console.log(all().length); // every registered check, browsable via checks list`
             </li>
             <li>
               <a
-                className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+                className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
                 href="https://github.com/plumblinehq/plumbline-web"
               >
                 plumbline-web
@@ -366,7 +366,7 @@ console.log(all().length); // every registered check, browsable via checks list`
             <code className="font-mono text-xs">complexity:medium</code> — with new checks for
             SEP-6/24/31/38 in{' '}
             <a
-              className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+              className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
               href="https://github.com/plumblinehq/plumbline-checks/issues?q=is%3Aissue+is%3Aopen+label%3Acomplexity%3Atrivial"
             >
               plumbline-checks

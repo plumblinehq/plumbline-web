@@ -11,8 +11,8 @@ export function AboutPage() {
   return (
     <div className="space-y-4">
       <header>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Methodology</h1>
-        <p className="mt-1 max-w-3xl text-sm text-slate-600">
+        <h1 className="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">Methodology</h1>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ink-soft">
           What Plumbline checks, how a grade is computed, what it deliberately does not test, and
           what it is not. Everything on this page describes behaviour implemented in{' '}
           <code className="font-mono text-xs">plumbline-server</code> — the site you are reading
@@ -22,11 +22,11 @@ export function AboutPage() {
 
       <Panel>
         <PanelHeader title="How a grade is computed" />
-        <div className="space-y-4 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-4 px-4 py-4 text-sm text-ink-soft">
           <p>
             Only checks whose severity is <strong>error</strong> affect a score. For each SEP:
           </p>
-          <pre className="overflow-x-auto rounded-md bg-slate-900 px-3 py-2 text-xs text-slate-100">
+          <pre className="overflow-x-auto rounded-md bg-canvas px-3 py-2 text-xs leading-relaxed text-ink-soft ring-1 ring-line ring-inset">
             <code>{`sep_score = (error-severity checks that passed)
           / (error-severity checks that passed or failed)
 
@@ -71,8 +71,8 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
           <dl className="grid gap-2 text-sm">
             {(['pass', 'fail', 'skip', 'error'] as const).map((status) => (
               <div key={status} className="grid grid-cols-[5rem_1fr] gap-3">
-                <dt className="font-medium text-slate-900">{STATUS_LABELS[status]}</dt>
-                <dd className="text-slate-600">{STATUS_EXPLANATIONS[status]}</dd>
+                <dt className="font-medium text-ink">{STATUS_LABELS[status]}</dt>
+                <dd className="text-ink-soft">{STATUS_EXPLANATIONS[status]}</dd>
               </div>
             ))}
           </dl>
@@ -84,7 +84,7 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
           title="What Plumbline does not test"
           description="These are product boundaries enforced in code, not aspirations."
         />
-        <div className="space-y-3 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-3 px-4 py-4 text-sm text-ink-soft">
           <ul className="list-disc space-y-2 pl-4">
             <li>
               <strong>Nothing is written to an anchor.</strong> Plumbline issues only{' '}
@@ -123,10 +123,10 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
 
       <Panel>
         <PanelHeader title="How to verify a number rather than trust it" />
-        <div className="space-y-3 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-3 px-4 py-4 text-sm text-ink-soft">
           <p>
             Every result on an{' '}
-            <Link to="/" className="underline decoration-slate-300">
+            <Link to="/" className="underline decoration-line underline-offset-2">
               anchor page
             </Link>{' '}
             opens to the message, the spec clause it enforces and the HTTP exchange behind it. The
@@ -140,7 +140,7 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
           </p>
           <p>
             The{' '}
-            <Link to="/checks" className="underline decoration-slate-300">
+            <Link to="/checks" className="underline decoration-line underline-offset-2">
               check catalogue
             </Link>{' '}
             is published by the API from the checks package, so it is the list that actually runs.
@@ -158,7 +158,7 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
 
       <Panel>
         <PanelHeader title="How often it runs, precisely" />
-        <div className="space-y-3 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-3 px-4 py-4 text-sm text-ink-soft">
           <p>
             The hosted instance scans every anchor on a{' '}
             <strong className="font-medium">15-minute schedule</strong> and a scan takes tens of
@@ -184,7 +184,7 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
           title="What the colours mean"
           description="These are a display convention applied to the API's score, not a second scoring rule."
         />
-        <div className="space-y-3 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-3 px-4 py-4 text-sm text-ink-soft">
           <p>
             Green is 90% or better, amber is 70% or better, and red is below that. The buckets exist
             so a column can be scanned at a glance, and nothing else in the project depends on them.
@@ -195,12 +195,12 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
 
       <Panel>
         <PanelHeader title="Opting out" />
-        <div className="space-y-3 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-3 px-4 py-4 text-sm text-ink-soft">
           <p>
             Any anchor that asks to be removed is removed, same day and without argument. The
             opt-out list is committed in{' '}
             <a
-              className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+              className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
               href="https://github.com/plumblinehq/plumbline-server/blob/main/seeds/optout.yaml"
             >
               the server repository
@@ -212,11 +212,11 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
 
       <Panel>
         <PanelHeader title="Relationship to SDF anchor-tests" />
-        <div className="space-y-3 px-4 py-4 text-sm text-slate-700">
+        <div className="space-y-3 px-4 py-4 text-sm text-ink-soft">
           <p>
             The Stellar Development Foundation maintains{' '}
             <a
-              className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+              className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
               href="https://github.com/stellar/stellar-anchor-tests"
             >
               @stellar/anchor-tests
@@ -228,7 +228,7 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[36rem] border-collapse text-sm">
               <thead>
-                <tr className="border-b border-slate-200 text-left text-xs tracking-wide text-slate-500 uppercase">
+                <tr className="border-b border-line text-left text-xs tracking-wide text-ink-faint uppercase">
                   <th scope="col" className="px-2 py-2 font-medium" />
                   <th scope="col" className="px-2 py-2 font-medium">
                     SDF anchor-tests
@@ -238,7 +238,7 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
                   </th>
                 </tr>
               </thead>
-              <tbody className="text-slate-700">
+              <tbody className="text-ink-soft">
                 {[
                   [
                     'Who runs it',
@@ -262,10 +262,10 @@ overall   = mean of the scores of the SEPs that are applicable`}</code>
                     'Wallets, users and the ecosystem choosing an anchor',
                   ],
                 ].map(([label, sdf, plumbline]) => (
-                  <tr key={label} className="border-b border-slate-100 last:border-0">
+                  <tr key={label} className="border-b border-line-soft last:border-0">
                     <th
                       scope="row"
-                      className="px-2 py-2 text-left align-top text-xs font-medium text-slate-900"
+                      className="px-2 py-2 text-left align-top text-xs font-medium text-ink"
                     >
                       {label}
                     </th>

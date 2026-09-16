@@ -50,16 +50,16 @@ export function AnchorPage() {
     <div className="space-y-4">
       <Breadcrumb />
 
-      <header className="space-y-1">
+      <header className="space-y-2">
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+          <h1 className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
             {detail.displayName ?? detail.homeDomain}
           </h1>
           <NetworkTag network={detail.network} />
         </div>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-1 text-sm text-slate-500">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-1 text-sm text-ink-faint">
           <a
-            className="font-mono underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+            className="font-mono underline decoration-line underline-offset-2 transition-colors hover:text-signal"
             href={`https://${detail.homeDomain}`}
             target="_blank"
             rel="noreferrer noopener"
@@ -67,16 +67,16 @@ export function AnchorPage() {
             {detail.homeDomain}
           </a>
           <a
-            className="text-xs underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+            className="text-xs underline decoration-line underline-offset-2 transition-colors hover:text-signal"
             href={`https://${detail.homeDomain}/.well-known/stellar.toml`}
             target="_blank"
             rel="noreferrer noopener"
           >
             stellar.toml
           </a>
-          <span className="text-xs text-slate-500">Added {formatTimestamp(detail.addedAt)}</span>
+          <span className="text-xs text-ink-faint">Added {formatTimestamp(detail.addedAt)}</span>
           {run ? (
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-ink-faint">
               Last scanned {formatRelativeTime(run.startedAt)}
             </span>
           ) : null}
@@ -84,7 +84,7 @@ export function AnchorPage() {
       </header>
 
       {detail.optedOut ? (
-        <div className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <div className="rounded-md border border-amber-400/40 bg-amber-400/10 px-4 py-3 text-sm text-amber-300">
           This anchor asked to be removed from Plumbline and is no longer scanned.{' '}
           {detail.optOutNote ?? ''}
         </div>
@@ -100,7 +100,7 @@ export function AnchorPage() {
           }
           aside={
             run ? (
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-ink-faint">
                 checks <code className="font-mono">v{run.checksLibVersion}</code>
               </span>
             ) : undefined
@@ -113,7 +113,7 @@ export function AnchorPage() {
             erroredCount={run.results.filter((result) => result.status === 'error').length}
           />
         ) : (
-          <p className="px-4 py-6 text-sm text-slate-500">
+          <p className="px-4 py-6 text-sm text-ink-faint">
             No results yet. The scan runs on a schedule, so check back shortly.
           </p>
         )}
@@ -123,18 +123,18 @@ export function AnchorPage() {
         <PanelHeader
           title="Score history"
           description={`Every recorded run in the last ${HISTORY_DAYS} days.`}
-          aside={<span className="text-xs text-slate-500">Points are runs, not days.</span>}
+          aside={<span className="text-xs text-ink-faint">Points are runs, not days.</span>}
         />
         {history.isError ? (
-          <p className="px-4 py-6 text-sm text-slate-500">
+          <p className="px-4 py-6 text-sm text-ink-faint">
             The history for this anchor could not be loaded.
           </p>
         ) : history.data === undefined ? (
-          <p className="px-4 py-6 text-sm text-slate-500">Loading history…</p>
+          <p className="px-4 py-6 text-sm text-ink-faint">Loading history…</p>
         ) : (
           <Suspense
             fallback={
-              <p className="px-4 py-8 text-center text-sm text-slate-500">Loading chart…</p>
+              <p className="px-4 py-8 text-center text-sm text-ink-faint">Loading chart…</p>
             }
           >
             <ScoreHistoryChart points={history.data} />
@@ -148,11 +148,11 @@ export function AnchorPage() {
           description={`The last ${RUN_PAGE_SIZE} runs, newest first.`}
         />
         {runs.isError ? (
-          <p className="px-4 py-6 text-sm text-slate-500">
+          <p className="px-4 py-6 text-sm text-ink-faint">
             The run history for this anchor could not be loaded.
           </p>
         ) : runs.data === undefined ? (
-          <p className="px-4 py-6 text-sm text-slate-500">Loading runs…</p>
+          <p className="px-4 py-6 text-sm text-ink-faint">Loading runs…</p>
         ) : (
           <RunList runs={runs.data} />
         )}
@@ -164,7 +164,7 @@ export function AnchorPage() {
             title="Checks"
             description="Every check this run performed, grouped by SEP. Open one to see its message, the spec clause it enforces and the HTTP exchange behind it."
             aside={
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-ink-faint">
                 {run.results.length} check{run.results.length === 1 ? '' : 's'} ran
               </span>
             }
@@ -186,10 +186,10 @@ export function AnchorPage() {
 
 function Breadcrumb() {
   return (
-    <nav aria-label="Breadcrumb" className="text-xs text-slate-500">
+    <nav aria-label="Breadcrumb" className="text-xs text-ink-faint">
       <Link
         to="/"
-        className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+        className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
       >
         Directory
       </Link>

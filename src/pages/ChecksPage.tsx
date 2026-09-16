@@ -21,8 +21,8 @@ export function ChecksPage() {
   return (
     <div className="space-y-4">
       <header>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Check catalogue</h1>
-        <p className="mt-1 max-w-3xl text-sm text-slate-600">
+        <h1 className="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">Check catalogue</h1>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ink-soft">
           Every check Plumbline can run, published by the API from the checks package itself — so
           this is the list that actually runs, not a copy of it. Each one enforces a clause in a
           Stellar Ecosystem Proposal, and its severity is that clause&apos;s own wording:{' '}
@@ -41,14 +41,14 @@ export function ChecksPage() {
               : `${shown} check${shown === 1 ? '' : 's'}.`
           }
           aside={
-            <label className="flex items-center gap-2 text-xs text-slate-600">
+            <label className="flex items-center gap-2 text-xs text-ink-soft">
               <span className="sr-only">Search checks</span>
               <input
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search…"
-                className="w-48 rounded-md border border-slate-300 px-2 py-1 text-sm shadow-sm focus:border-slate-500 focus:outline-none"
+                className="w-48 rounded-md border border-line bg-raised px-2 py-1 text-sm text-ink shadow-sm transition-colors placeholder:text-ink-faint focus:border-signal focus:outline-none"
               />
             </label>
           }
@@ -59,18 +59,18 @@ export function ChecksPage() {
         ) : catalogue.isError ? (
           <ErrorPanel error={catalogue.error} onRetry={() => void catalogue.refetch()} />
         ) : grouped.size === 0 ? (
-          <p className="px-4 py-8 text-center text-sm text-slate-500">
+          <p className="px-4 py-8 text-center text-sm text-ink-faint">
             No check matches “{query}”.
           </p>
         ) : (
-          <div className="divide-y divide-slate-200">
+          <div className="divide-y divide-line">
             {[...grouped.entries()].map(([sep, checks]) => (
               <section key={sep}>
                 <h2 className="flex flex-wrap items-baseline gap-2 px-4 pt-4 pb-1">
-                  <span className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                  <span className="text-xs font-semibold tracking-wide text-ink-faint uppercase">
                     {sepLabel(sep)}
                   </span>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-ink-faint">
                     {`· ${checks.length} check${checks.length === 1 ? '' : 's'}`}
                   </span>
                 </h2>
@@ -78,26 +78,26 @@ export function ChecksPage() {
                   {checks.map((check) => (
                     <li
                       key={check.id}
-                      className="border-b border-slate-100 px-4 py-3 last:border-0"
+                      className="border-b border-line-soft px-4 py-3.5 last:border-0"
                     >
                       <div className="flex flex-wrap items-center gap-2">
                         <SeverityTag severity={check.severity} />
-                        <span className="text-sm text-slate-900">{check.title}</span>
+                        <span className="text-sm text-ink">{check.title}</span>
                       </div>
-                      <p className="mt-1 text-xs text-slate-600">{check.description}</p>
+                      <p className="mt-1 text-xs text-ink-soft">{check.description}</p>
                       <dl className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs">
                         <div className="flex gap-1">
-                          <dt className="text-slate-500">id</dt>
-                          <dd className="font-mono text-slate-600">{check.id}</dd>
+                          <dt className="text-ink-faint">id</dt>
+                          <dd className="font-mono text-ink-soft">{check.id}</dd>
                         </div>
                         <div className="flex gap-1">
-                          <dt className="text-slate-500">spec</dt>
-                          <dd className="text-slate-600"><SpecRefLink specRef={check.specRef} /></dd>
+                          <dt className="text-ink-faint">spec</dt>
+                          <dd className="text-ink-soft"><SpecRefLink specRef={check.specRef} /></dd>
                         </div>
                         {check.requires.length > 0 ? (
                           <div className="flex gap-1">
-                            <dt className="text-slate-500">requires</dt>
-                            <dd className="font-mono text-slate-600">
+                            <dt className="text-ink-faint">requires</dt>
+                            <dd className="font-mono text-ink-soft">
                               {check.requires.join(', ')}
                             </dd>
                           </div>

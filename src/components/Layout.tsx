@@ -10,13 +10,14 @@ const NAV_ITEMS = [
 
 function navLinkClass({ isActive }: { isActive: boolean }): string {
   const base = 'rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors';
-  return isActive ? `${base} bg-slate-900 text-white` : `${base} text-slate-600 hover:bg-slate-100`;
+  return isActive ? `${base} bg-raised text-signal` : `${base} text-ink-soft hover:bg-raised hover:text-ink`;
 }
 
 /**
  * The plumb line: a weighted line that shows whether something is true and
  * vertical. The same mark as the favicon, drawn inline so the header never
- * depends on an asset request.
+ * depends on an asset request. The bob carries the signal colour — the one
+ * warm point on the cold canvas, saying "live".
  */
 function Mark() {
   return (
@@ -32,24 +33,24 @@ function Mark() {
         y1="2"
         x2="16"
         y2="20"
-        stroke="#0f172a"
+        stroke="#fbbf24"
         strokeWidth="2.5"
         strokeLinecap="round"
       />
-      <path d="M16 18 L22 27 A7 7 0 0 1 10 27 Z" fill="#0f172a" />
+      <path d="M16 18 L22 27 A7 7 0 0 1 10 27 Z" fill="#fbbf24" />
     </svg>
   );
 }
 
 export function Layout() {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
+    <div className="flex min-h-screen flex-col bg-canvas text-ink">
+      <header className="sticky top-0 z-40 border-b border-line bg-canvas/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Link to="/" className="flex items-center gap-2.5">
             <Mark />
-            <span className="text-lg font-semibold tracking-tight">Plumbline</span>
-            <span className="hidden text-xs text-slate-500 sm:inline">
+            <span className="font-display text-lg font-semibold tracking-tight">Plumbline</span>
+            <span className="hidden text-xs text-ink-faint sm:inline">
               Stellar anchor conformance
             </span>
           </Link>
@@ -64,16 +65,16 @@ export function Layout() {
       </header>
 
       {/*
-       * A horizon line under the nav: a faint top-light gradient strip that
-       * gives the white grade cards something to sit on instead of flat
-       * grey. Decorative only — the single <Outlet /> stays in <main>.
+       * A horizon band under the nav: a faint top-light gradient that gives
+       * the grade cards something to sit on instead of flat dark. Decorative
+       * only — the single <Outlet /> stays in <main>.
        */}
       <div
         aria-hidden="true"
-        className="h-10 border-b border-slate-100 bg-gradient-to-b from-white to-slate-50 sm:h-14"
+        className="h-12 border-b border-line-soft bg-gradient-to-b from-raised/50 to-transparent sm:h-16"
       />
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 sm:py-12">
         <Outlet />
       </main>
 
@@ -84,10 +85,10 @@ export function Layout() {
 
 function Footer() {
   return (
-    <footer className="mt-12 border-t border-slate-100 bg-white">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm text-slate-600 sm:grid-cols-2 sm:px-6">
+    <footer className="mt-16 border-t border-line bg-surface/40">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm text-ink-soft sm:grid-cols-2 sm:px-6">
         <div>
-          <h2 className="text-xs font-semibold tracking-wide text-slate-900 uppercase">
+          <h2 className="text-xs font-semibold tracking-wide text-ink uppercase">
             What this tests, and what it never will
           </h2>
           <ul className="mt-2 list-disc space-y-1 pl-4 text-xs">
@@ -111,7 +112,7 @@ function Footer() {
           <p className="text-xs">
             Plumbline is not a replacement for the Stellar Development Foundation&apos;s{' '}
             <a
-              className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+              className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
               href="https://github.com/stellar/stellar-anchor-tests"
             >
               @stellar/anchor-tests
@@ -122,20 +123,20 @@ function Footer() {
           <p className="text-xs">
             Source:{' '}
             <a
-              className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+              className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
               href="https://github.com/plumblinehq"
             >
               github.com/plumblinehq
             </a>{' '}
             · Apache-2.0 ·{' '}
             <a
-              className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+              className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
               href="https://github.com/plumblinehq/plumbline-server/blob/main/seeds/optout.yaml"
             >
               opt-out list
             </a>
           </p>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-ink-faint">
             Reading from <code className="font-mono">{apiBase}</code>. Every score and grade shown
             here is computed by that API; this site derives none of them.
           </p>

@@ -1,10 +1,15 @@
 import type { Severity } from '../api/types';
 import { SEVERITY_EXPLANATIONS, SEVERITY_LABELS } from '../lib/checkCopy';
 
+/**
+ * MUST is the signal colour — the one decoration the accent budget buys is
+ * the tag that says a clause is mandatory. Warning and info stay quiet so
+ * the MUST tags are the ones that read at a glance.
+ */
 const SEVERITY_STYLES: Record<Severity, string> = {
-  error: 'bg-slate-900 text-white',
-  warning: 'bg-slate-200 text-slate-700',
-  info: 'bg-slate-100 text-slate-500',
+  error: 'bg-signal text-canvas',
+  warning: 'bg-raised text-ink-soft ring-1 ring-line ring-inset',
+  info: 'bg-surface text-ink-faint ring-1 ring-line ring-inset',
 };
 
 export function SeverityTag({ severity }: { severity: Severity }) {

@@ -8,7 +8,7 @@ export function NetworkTag({ network }: { network: string }) {
   return (
     <span
       className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium ${
-        isTestnet ? 'bg-violet-50 text-violet-700' : 'bg-sky-50 text-sky-700'
+        isTestnet ? 'bg-violet-400/15 text-violet-300' : 'bg-sky-400/15 text-sky-300'
       }`}
       title={isTestnet ? 'A test network anchor: no real funds are involved.' : 'Stellar pubnet.'}
     >

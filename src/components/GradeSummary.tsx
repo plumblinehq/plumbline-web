@@ -22,13 +22,13 @@ export function GradeSummary({
   return (
     <div className="grid gap-6 px-4 py-5 sm:grid-cols-[minmax(0,14rem)_1fr] sm:px-6 sm:py-6">
       <div>
-        <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">Overall</p>
+        <p className="text-xs font-medium tracking-wide text-ink-faint uppercase">Overall</p>
         <ScoreHero score={overallScore} className="mt-2" />
         <div className="mt-4">
           <ScoreBar score={overallScore} />
         </div>
         {caveat === null ? (
-          <p className="mt-3 text-xs text-slate-500">
+          <p className="mt-3 text-xs text-ink-faint">
             The share of applicable <code className="font-mono">MUST</code> checks that passed.
           </p>
         ) : (
@@ -37,7 +37,7 @@ export function GradeSummary({
            * an unverified clause must be impossible to miss next to a number
            * that quietly excludes it.
            */
-          <p className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-2.5 py-2 text-xs leading-relaxed text-amber-900">
+          <p className="mt-3 rounded-md border border-amber-400/40 bg-amber-400/10 px-2.5 py-2 text-xs leading-relaxed text-amber-300">
             <span className="font-semibold">{caveat}</span> — those results are excluded from this
             score because Plumbline could not complete them, so the score covers only the checks
             that ran.
@@ -46,23 +46,23 @@ export function GradeSummary({
       </div>
 
       <div>
-        <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">By SEP</p>
+        <p className="text-xs font-medium tracking-wide text-ink-faint uppercase">By SEP</p>
         {grades.length === 0 ? (
-          <p className="mt-2 text-sm text-slate-500">No SEP grades recorded for this run.</p>
+          <p className="mt-2 text-sm text-ink-faint">No SEP grades recorded for this run.</p>
         ) : (
           <ul className="mt-3 space-y-4">
             {grades.map((grade) => (
               <li key={grade.sep} className="grid grid-cols-[4rem_1fr] items-center gap-3">
-                <span className="text-sm font-medium text-slate-700">{sepLabel(grade.sep)}</span>
+                <span className="text-sm font-medium text-ink-soft">{sepLabel(grade.sep)}</span>
                 {grade.applicable ? (
                   <div className="flex items-center gap-3">
                     <ScoreBar score={grade.score} />
-                    <span className="w-16 text-right text-sm tabular-nums text-slate-700">
+                    <span className="w-16 text-right text-sm tabular-nums text-ink-soft">
                       {formatScore(grade.score)}
                     </span>
                   </div>
                 ) : (
-                  <span className="text-sm text-slate-400">
+                  <span className="text-sm text-ink-faint">
                     not implemented — excluded from the score
                   </span>
                 )}
