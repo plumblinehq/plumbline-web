@@ -20,10 +20,10 @@ export function RootErrorBoundary() {
 
   return (
     <Panel className="p-6">
-      <h1 className="text-base font-semibold text-slate-900">{title}</h1>
-      <p className="mt-1 text-sm text-slate-600">{detail}</p>
+      <h1 className="text-base font-semibold text-ink">{title}</h1>
+      <p className="mt-1 text-sm text-ink-soft">{detail}</p>
       <a
-        className="mt-4 inline-block text-sm font-medium text-slate-900 underline decoration-slate-300 underline-offset-2"
+        className="mt-4 inline-block text-sm font-medium text-ink underline decoration-line underline-offset-2 transition-colors hover:text-signal"
         href="/"
       >
         Back to the directory

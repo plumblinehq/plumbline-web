@@ -9,9 +9,9 @@ import { sepLabel } from '../lib/format';
 const ALL = 'all';
 
 const SELECT_CLASS =
-  'rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none';
+  'rounded-md border border-line bg-raised px-2 py-1.5 text-sm text-ink shadow-sm transition-colors focus:border-signal focus:outline-none';
 
-const LABEL_CLASS = 'flex flex-col gap-1 text-xs font-medium text-slate-600';
+const LABEL_CLASS = 'flex flex-col gap-1 text-xs font-medium text-ink-soft';
 
 export function DirectoryFilters({
   filters,
@@ -104,7 +104,7 @@ export function DirectoryFilters({
         <button
           type="button"
           onClick={onReset}
-          className="rounded-md px-2 py-1.5 text-sm font-medium text-slate-600 underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+          className="rounded-md px-2 py-1.5 text-sm font-medium text-ink-soft underline decoration-line underline-offset-2 transition-colors hover:text-signal"
         >
           Clear filters
         </button>

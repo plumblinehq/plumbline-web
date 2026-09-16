@@ -13,11 +13,17 @@ import type { HistoryPoint } from '../api/types';
 import { buildChartRows, chartSeps, seriesKey } from '../lib/chartData';
 import { formatScore, sepLabel } from '../lib/format';
 
-/** Written as literals: a colour assembled at runtime is fine here, but these read better. */
-const OVERALL_COLOR = '#0f172a';
-const SEP_COLORS = ['#0284c7', '#059669', '#d97706', '#7c3aed', '#db2777'];
+/**
+ * The overall line is the signal colour — the same amber as the brand mark,
+ * the nav and the links, so the eye tracks one hue across the whole product.
+ * The per-SEP dashed lines stay differentiated by hue, muted against it.
+ * Written as literals: a colour assembled at runtime is fine here, but these
+ * read better.
+ */
+const OVERALL_COLOR = '#fbbf24';
+const SEP_COLORS = ['#38bdf8', '#34d399', '#c084fc', '#f472b6', '#fb7185'];
 
-const AXIS_TICK = { fill: '#64748b', fontSize: 11 } as const;
+const AXIS_TICK = { fill: '#8b98b8', fontSize: 11 } as const;
 
 const AT_FORMAT = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
@@ -31,7 +37,7 @@ export function ScoreHistoryChart({ points }: { points: readonly HistoryPoint[] 
 
   if (points.length === 0) {
     return (
-      <p className="px-4 py-8 text-center text-sm text-slate-500">
+      <p className="px-4 py-8 text-center text-sm text-ink-faint">
         No runs recorded in this window yet.
       </p>
     );
@@ -42,7 +48,7 @@ export function ScoreHistoryChart({ points }: { points: readonly HistoryPoint[] 
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={rows} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
             <XAxis
               dataKey="at"
               type="number"
@@ -64,7 +70,13 @@ export function ScoreHistoryChart({ points }: { points: readonly HistoryPoint[] 
                 typeof value === 'number' ? formatScore(value) : String(value ?? ''),
                 String(name ?? ''),
               ]}
-              contentStyle={{ fontSize: 12, borderRadius: 6 }}
+              contentStyle={{
+                fontSize: 12,
+                borderRadius: 6,
+                background: '#16223b',
+                border: '1px solid #2a3958',
+                color: '#e6eaf2',
+              }}
             />
             <Legend wrapperStyle={{ fontSize: 12 }} />
             <Line

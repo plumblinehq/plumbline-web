@@ -3,7 +3,7 @@ import type { AnchorSummary, Grade } from '../api/types';
 import { formatErrorCaveat, formatRelativeTime, formatScore, scoreTone, sepColumns, sepLabel, type ScoreTone } from '../lib/format';
 import { NetworkTag } from './NetworkTag';
 
-/** Readable-on-white partners for the tested pill fills, for in-table figures. */
+/** Luminous partners for the tested pill fills, for in-table figures. */
 const TONE_TEXT: Record<ScoreTone, string> = {
   good: 'text-grade-good',
   fair: 'text-grade-fair',
@@ -40,7 +40,7 @@ export function AnchorTable({
           scanned.
         </caption>
         <thead>
-          <tr className="border-b border-slate-200 text-left text-xs tracking-wide text-slate-500 uppercase">
+          <tr className="border-b border-line text-left text-xs tracking-wide text-ink-faint uppercase">
             <th scope="col" className="px-4 py-2 font-medium">
               Anchor
             </th>
@@ -64,16 +64,16 @@ export function AnchorTable({
           {anchors.map((anchor) => (
             <tr
               key={anchor.homeDomain}
-              className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
+              className="border-b border-line-soft last:border-0 transition-colors hover:bg-raised/60"
             >
               <td className="px-4 py-3.5 sm:px-5">
                 <Link
                   to={`/anchor/${encodeURIComponent(anchor.homeDomain)}`}
-                  className="font-medium text-slate-900 hover:underline"
+                  className="font-medium text-ink transition-colors hover:text-signal"
                 >
                   {anchor.displayName ?? anchor.homeDomain}
                 </Link>
-                <div className="font-mono text-xs text-slate-500">{anchor.homeDomain}</div>
+                <div className="font-mono text-xs text-ink-faint">{anchor.homeDomain}</div>
               </td>
               <td className="px-4 py-3">
                 <NetworkTag network={anchor.network} />
@@ -84,7 +84,7 @@ export function AnchorTable({
                   <td key={sep} className="px-4 py-3 text-right">
                     {grade === undefined || !grade.applicable ? (
                       <span
-                        className="text-slate-400"
+                        className="text-ink-faint"
                         title={`${sepLabel(sep)} is not implemented by this anchor, so its checks skip and it is excluded from the score.`}
                       >
                         —
@@ -111,7 +111,7 @@ export function AnchorTable({
                     const caveat = formatErrorCaveat(anchor.lastRunErrorCount);
                     return caveat === null ? null : (
                       <span
-                        className="inline-flex items-center rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-800 ring-1 ring-amber-200 ring-inset"
+                        className="inline-flex items-center rounded bg-amber-400/15 px-1.5 py-0.5 text-[11px] font-semibold text-amber-300 ring-1 ring-amber-400/40 ring-inset"
                         title={`${caveat.slice(1)} — Plumbline could not complete them, so the score covers only the checks that ran.`}
                       >
                         {caveat}
@@ -120,14 +120,14 @@ export function AnchorTable({
                   })()}
                 </div>
               </td>
-              <td className="px-4 py-3 text-xs text-slate-500">
+              <td className="px-4 py-3 text-xs text-ink-faint">
                 {anchor.lastRunAt === null ? (
                   'never'
                 ) : (
                   <>
                     {formatRelativeTime(anchor.lastRunAt, now)}
                     {anchor.lastRunStatus !== null && anchor.lastRunStatus !== 'complete' ? (
-                      <span className="ml-1 text-amber-700">({anchor.lastRunStatus})</span>
+                      <span className="ml-1 text-amber-400">({anchor.lastRunStatus})</span>
                     ) : null}
                   </>
                 )}

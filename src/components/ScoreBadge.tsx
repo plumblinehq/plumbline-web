@@ -82,7 +82,7 @@ export function ScoreBar({ score }: { score: number | null }) {
 
   return (
     <div
-      className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200"
+      className="h-1.5 w-full overflow-hidden rounded-full bg-raised"
       role="img"
       aria-label={score === null ? 'No score recorded' : `Score ${formatScore(score)}`}
     >

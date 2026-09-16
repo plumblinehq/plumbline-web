@@ -26,16 +26,16 @@ export function BadgeEmbed({ homeDomain }: { homeDomain: string }) {
     <div className="space-y-3 px-4 py-4">
       <div className="flex items-center gap-3">
         <img src={url} alt={`Plumbline conformance score for ${homeDomain}`} height={20} />
-        <span className="text-xs text-slate-500">Refreshed hourly by the API.</span>
+        <span className="text-xs text-ink-faint">Refreshed hourly by the API.</span>
       </div>
       <div className="flex items-start gap-2">
-        <pre className="min-w-0 flex-1 overflow-x-auto rounded-md bg-slate-900 px-3 py-2 text-xs text-slate-100">
+        <pre className="min-w-0 flex-1 overflow-x-auto rounded-md bg-canvas px-3 py-2 text-xs text-ink-soft">
           <code>{snippet}</code>
         </pre>
         <button
           type="button"
           onClick={() => void copy()}
-          className="shrink-0 rounded-md border border-slate-300 px-2 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100"
+          className="shrink-0 rounded-md border border-line px-2 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:bg-raised hover:text-ink"
         >
           {copied ? 'Copied' : 'Copy'}
         </button>

@@ -21,7 +21,7 @@ export function SpecRefLink({ specRef }: { specRef: string | null }) {
 
   return (
     <a
-      className="underline decoration-slate-300 underline-offset-2 hover:text-slate-900"
+      className="underline decoration-line underline-offset-2 transition-colors hover:text-signal"
       href={link.url}
       target="_blank"
       rel="noreferrer noopener"
